@@ -1,0 +1,134 @@
+{
+  "extensionName": {
+    "message": "拖拽 GPT - 轻松开始人工智能之旅！"
+  },
+  "extensionDescription": {
+    "message": "只需拖拽并点击按钮，就可以轻松向ChatGPT提问或发出请求！"
+  },
+  "dragGPT": {
+    "message": "拖拽 GPT"
+  },
+  "noApiKeyPage_openAIApiKey_placeholder": {
+    "message": "OpenAI API 密钥"
+  },
+  "noApiKeyPage_checkingApiKey": {
+    "message": "正在检查 API 密钥...\n发送测试请求中..."
+  },
+  "noApiKeyPage_howToGetApiKey": {
+    "message": "如何获取 OpenAI 的 API 密钥？"
+  },
+  "noApiKeyPage_howToGetApiKeyDetail1": {
+    "message": "如果没有 OpenAI 帐号，需要进行{注册}。"
+  },
+  "noApiKeyPage_howToGetApiKeyDetail2": {
+    "message": "前往{API 密钥页面}。"
+  },
+  "noApiKeyPage_howToGetApiKeyDetail3": {
+    "message": "点击“创建新的密钥”按钮以生成 API 密钥。"
+  },
+  "noApiKeyPage_howToGetApiKeyDetail4": {
+    "message": "复制密钥并粘贴到输入框，然后点击保存按钮即可开始使用！"
+  },
+  "footer_EmailText": {
+    "message": "功能建议 / 错误报告"
+  },
+  "noApiKeyPage_saveButtonText": {
+    "message": "保存"
+  },
+  "quickChattingPage_sendButtonText": {
+    "message": "发送"
+  },
+  "quickChattingPage_stopButtonText": {
+    "message": "停止回答"
+  },
+  "quickChattingPage_chattingPlaceholder": {
+    "message": "例如：你好！"
+  },
+  "quickChattingPage_backButtonText": {
+    "message": "返回"
+  },
+  "quickChattingPage_resetButtonText": {
+    "message": "重置对话"
+  },
+  "quickChattingPage_copyButtonText_copy": {
+    "message": "复制最后的回答"
+  },
+  "quickChattingPage_copyButtonText_copied": {
+    "message": "已复制！"
+  },
+  "quickChattingPage_isGpt4": {
+    "message": "GPT4"
+  },
+  "slotListPage_newSlotButtonText": {
+    "message": "添加插槽"
+  },
+  "slogListPage_showChatHistoryButtonText": {
+    "message": "대화 기록 보기"
+  },
+  "slotListPage_quickChatButtonText": {
+    "message": "快速对话"
+  },
+  "slotListPage_resetApiKeyButtonText": {
+    "message": "重置 API 密钥"
+  },
+  "slotListPage_promptSlotsTitle": {
+    "message": "提示插槽"
+  },
+  "slotListPage_resetApiKeyConfirmMessage": {
+    "message": "确定要重置 API 密钥吗？"
+  },
+  "slotListItem_deleteButtonText": {
+    "message": "删除"
+  },
+  "slotListItem_editButtonText": {
+    "message": "编辑"
+  },
+  "slotDetail_promptSlotName": {
+    "message": "提示插槽名称"
+  },
+  "slotDetail_promptSlotName_placeholder": {
+    "message": "例如：用于英译汉"
+  },
+  "slotDetail_writePromptTitle": {
+    "message": "请填写用于ChatGPT请求的预设提示内容（最多2000个字符）"
+  },
+  "slotDetail_promptInputPlaceholder": {
+    "message": "例如：告诉我英语句子或单词的中文意思"
+  },
+  "slotDetail_temperatureTitle": {
+    "message": "随机性（温度：0~2）"
+  },
+  "slotDetail_isGpt4Turbo": {
+    "message": "使用 GPT4Turbo（默认值：gpt4o）"
+  },
+  "slotDetail_saveButtonText": {
+    "message": "保存"
+  },
+  "slotDetail_cancelButtonText": {
+    "message": "取消"
+  },
+  "responseMessageBox_responseTitle": {
+    "message": "回答"
+  },
+  "responseMessageBox_copyButtonText_copy": {
+    "message": "复制最后的回答"
+  },
+  "responseMessageBox_copyButtonText_copied": {
+    "message": "已复制！"
+  },
+  "responseMessageBox_sendButtonText": {
+    "message": "发送"
+  },
+  "responseMessageBox_stopButtonText": {
+    "message": "停止回答"
+  },
+  "responseMessageBox_messageInputPlacepolder": {
+    "message": "例如：将上述内容简单总结一下"
+  },
+  "errorMessageBox_errorTitle": {
+    "message": "错误"
+  },
+  "errorMessageBox_unknownError": {
+    "message": "未知错误"
+  }
+}
