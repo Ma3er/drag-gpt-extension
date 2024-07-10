@@ -39,7 +39,7 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
   onRequestClick,
   onAddClick,
   onEditClick,
-  selectedSlot,
+  //selectedSlot,
   ...divProps
 }) => {
   const [slots, setSlots] = useState<Slot[]>([]);
@@ -65,7 +65,7 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
   return (
     <div
       {...divProps}
-      style={{ position: 'absolute', top, left, background: 'white', border: '2px', borderRadius: "radii", padding: "4px" }}
+      style={{ position: 'absolute', top, left, background: 'white', border: '2px', borderRadius: "radii", padding: "1px" }}
     >
       {loading ? (
         <Spinner size="xs" />
