@@ -7,6 +7,7 @@ const defaultSlot: Slot = {
   type: "gpt4o",
 };
 
+
 describe("SlotsManipulator test", () => {
   test("getSelectedSlot test", () => {
     // given

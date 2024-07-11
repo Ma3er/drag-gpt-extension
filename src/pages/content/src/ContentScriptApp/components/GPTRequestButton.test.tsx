@@ -10,6 +10,7 @@ test('renders GPTRequestButton', () => {
       onRequestClick={() => {}}
       onAddClick={() => {}}
       onEditClick={() => {}}
+      updatedSlots={() => {}} // Add this line
     />
   );
 });
@@ -23,6 +24,7 @@ test('renders GPTRequestButton with loading', () => {
       onRequestClick={() => {}}
       onAddClick={() => {}}
       onEditClick={() => {}}
+      updatedSlots={() => {}} // Add this line
     />
   );
 });

@@ -1,4 +1,8 @@
 import React, { useEffect } from "react";
+import {
+  getSelectionNodeRect,
+  getSelectionText,
+} from "@pages/content/src/ContentScriptApp/utils/selection";
 import GPTRequestButton from "@pages/content/src/ContentScriptApp/components/GPTRequestButton";
 import ResponseMessageBox from "@pages/content/src/ContentScriptApp/components/messageBox/ResponseMessageBox";
 import ErrorMessageBox from "@pages/content/src/ContentScriptApp/components/messageBox/ErrorMessageBox";
@@ -21,21 +25,6 @@ const Container = styled.div`
 `;
 
 const skipLoopCycleOnce = async () => await delayPromise(1);
-
-const getSelectionText = () => {
-  const selection = window.getSelection();
-  return selection ? selection.toString() : "";
-};
-
-const getSelectionNodeRect = () => {
-  const selection = window.getSelection();
-  if (selection && selection.rangeCount > 0) {
-    const range = selection.getRangeAt(0);
-    const rect = range.getBoundingClientRect();
-    return rect;
-  }
-  return null;
-};
 
 async function getGPTResponseAsStream({
   input,
@@ -71,7 +60,7 @@ interface Slot {
   // Add other properties as needed
 }
 
-function DragGPT() {
+export default function DragGPT() {
   const { selectedSlot, updateSelectedSlot } = useSelectedSlot();
   const [state, send] = useMachine(dragStateMachine, {
     actions: {
@@ -117,7 +106,12 @@ function DragGPT() {
     };
   }, [send]);
 
-  const requestGPT = () => {
+  const requestGPT = async () => {
+    if (!selectedSlot) {
+      console.error("No slot selected");
+      return;
+    }
+    console.log("Requesting GPT with slot:", selectedSlot);
     send("REQUEST");
   };
 
@@ -125,19 +119,29 @@ function DragGPT() {
     send("CLOSE_MESSAGE_BOX");
   };
 
-  const handleRequestClick = (slot: Slot) => {
+  const handleRequestClick = async (slot: Slot) => {
     console.log("Request Clicked:", slot);
-    updateSelectedSlot(slot.id);
+    const newSelectedSlot = await updateSelectedSlot(slot.id);
+    console.log("New selected slot RequestClick:", newSelectedSlot);
+    requestGPT(); // Ensure the request is made after the slot is updated
   };
 
-  const handleAddClick = (slot: Slot) => {
+  const handleAddClick = async (slot: Slot) => {
     console.log("Add Clicked:", slot);
-    updateSelectedSlot(slot.id);
+    const newSelectedSlot = await updateSelectedSlot(slot.id);
+    console.log("New selected slot AddClick:", newSelectedSlot);
   };
 
-  const handleEditClick = (slot: Slot) => {
+  const handleEditClick = async (slot: Slot) => {
     console.log("Edit Clicked:", slot);
-    updateSelectedSlot(slot.id);
+    const newSelectedSlot = await updateSelectedSlot(slot.id);
+    console.log("New selected slot EditClick:", newSelectedSlot);
+  };
+
+  const handleUpdatedSlots = async (slot: Slot) => {
+    console.log("Updated Slots:", slot);
+    const newSelectedSlot = await updateSelectedSlot(slot.id);
+    console.log("Using new slot UpdatedSlots:", newSelectedSlot);
   };
 
   return (
@@ -151,8 +155,7 @@ function DragGPT() {
           onRequestClick={handleRequestClick}
           onAddClick={handleAddClick}
           onEditClick={handleEditClick}
-          selectedSlot={selectedSlot}
-        //updateSelectedSlot={updateSelectedSlot} // Add this line
+          updatedSlots={handleUpdatedSlots}
         />
       )}
       {state.matches("temp_response_message_box") && (
@@ -195,5 +198,3 @@ function DragGPT() {
     </Container>
   );
 }
-
-export default DragGPT;
