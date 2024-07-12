@@ -43,6 +43,7 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
   selectSlot,
   ...divProps
 }) => {
+
   const [slots, setSlots] = useState<Slot[]>([]);
   const [selectedSlotId, setSelectedSlotId] = useState<string | undefined>();
 
@@ -51,11 +52,12 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
       const allSlots = await SlotStorage.getAllSlots();
       setSlots(allSlots.slice(0, 3));
     };
-
+  
     fetchSlots();
   }, []);
-
+  
   const updateSelectedSlot = async (slotId: string) => {
+    console.log('🔄 Updating selected slot to:', slotId);
     const slots = await SlotStorage.getAllSlots();
     const updatedSlots = slots.map(slot => ({
       ...slot,
@@ -63,20 +65,31 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
     }));
     await SlotStorage.setAllSlots(updatedSlots);
     setSelectedSlotId(slotId);
+    console.log('✅ Updated slots:', updatedSlots);
+    console.log('🔵 New selectedSlotId:', slotId);
   };
-
+  
   const handleSlotClick = async (slot: Slot, callback: (slot: Slot) => void) => {
     if (slot.id !== selectedSlotId) {
       await updateSelectedSlot(slot.id);
       await selectSlot(slot);
+      setSelectedSlotId(slot.id); // Ensure state is updated
     }
+    console.log('🟢 handleSlotClick called with slot:', slot);
+    console.log('🔵 Current selectedSlot:', slot.id);
     callback(slot);
   };
+  
+  useEffect(() => {
+    if (selectedSlotId) {
+      console.log('🔵 selectedSlotId changed:', selectedSlotId);
+    }
+  }, [selectedSlotId]);
 
   return (
     <div
       {...divProps}
-      style={{ position: 'absolute', top, left, background: 'white', border: '2px', borderRadius: "radii", padding: "1px" }}
+      style={{ position: 'absolute', top, left, background: 'white', border: '2px', borderRadius: "radii", padding: "3px" }}
     >
       {loading ? (
         <Spinner size="xs" />
@@ -91,7 +104,7 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
                   size="xs"
                   colorScheme={slots[0]?.id === selectedSlotId ? "orange" : "teal"}
                   onClick={() => {
-                    console.log('ChatIcon IconButton clicked:', slots[0]);
+                    console.log('0️⃣ ChatIcon IconButton clicked:', slots[0]);
                     handleSlotClick(slots[0], onRequestClick);
                   }}
                   variant="outline"
@@ -106,7 +119,7 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
                   size="xs"
                   colorScheme={slots[1]?.id === selectedSlotId ? "orange" : "teal"}
                   onClick={() => {
-                    console.log('AddIcon IconButton clicked:', slots[1]);
+                    console.log('1️⃣ AddIcon IconButton clicked:', slots[1]);
                     handleSlotClick(slots[1], onAddClick);
                   }}
                   variant="outline"
@@ -121,7 +134,7 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
                   size="xs"
                   colorScheme={slots[2]?.id === selectedSlotId ? "orange" : "teal"}
                   onClick={() => {
-                    console.log('EditIcon IconButton clicked:', slots[2]);
+                    console.log('2️⃣ EditIcon IconButton clicked:', slots[2]);
                     handleSlotClick(slots[2], onEditClick);
                   }}
                   variant="outline"
@@ -135,6 +148,6 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
       )}
     </div>
   );
-};
+}
 
 export default GPTRequestButton;
