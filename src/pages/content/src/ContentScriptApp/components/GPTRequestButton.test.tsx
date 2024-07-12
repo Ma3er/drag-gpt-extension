@@ -7,10 +7,11 @@ test('renders GPTRequestButton', () => {
       top={0}
       left={0}
       loading={false}
-      onRequestClick={() => {}}
-      onAddClick={() => {}}
-      onEditClick={() => {}}
-      updatedSlots={() => {}} // Add this line
+      onRequestClick={() => { }}
+      onAddClick={() => { }}
+      onEditClick={() => { }}
+      updatedSlots={() => { }} // Add this line
+      selectSlot={() => { }} // Add this line
     />
   );
 });
@@ -21,10 +22,11 @@ test('renders GPTRequestButton with loading', () => {
       top={0}
       left={0}
       loading={true}
-      onRequestClick={() => {}}
-      onAddClick={() => {}}
-      onEditClick={() => {}}
-      updatedSlots={() => {}} // Add this line
+      onRequestClick={() => { }}
+      onAddClick={() => { }}
+      onEditClick={() => { }}
+      updatedSlots={() => { }} // Add this line
+      selectSlot={() => { }} // Add this line
     />
   );
 });

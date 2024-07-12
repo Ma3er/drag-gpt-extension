@@ -17,6 +17,7 @@ import ChatText from "@src/shared/component/ChatText";
 import AssistantChat from "@src/shared/component/AssistantChat";
 import MessageBox from "@pages/content/src/ContentScriptApp/components/messageBox/MessageBox";
 import { t } from "@src/chrome/i18n";
+import slotListPageStateMachine from "@src/pages/popup/xState/slotListPageStateMachine";
 
 const Container = styled.div`
   * {
@@ -130,19 +131,33 @@ export default function DragGPT() {
     console.log("Add Clicked:", slot);
     const newSelectedSlot = await updateSelectedSlot(slot.id);
     console.log("New selected slot AddClick:", newSelectedSlot);
+    requestGPT(); // Ensure the request is made after the slot is updated
   };
 
   const handleEditClick = async (slot: Slot) => {
     console.log("Edit Clicked:", slot);
     const newSelectedSlot = await updateSelectedSlot(slot.id);
     console.log("New selected slot EditClick:", newSelectedSlot);
+    requestGPT(); // Ensure the request is made after the slot is updated
   };
 
   const handleUpdatedSlots = async (slot: Slot) => {
     console.log("Updated Slots:", slot);
     const newSelectedSlot = await updateSelectedSlot(slot.id);
     console.log("Using new slot UpdatedSlots:", newSelectedSlot);
+    requestGPT(); // Ensure the request is made after the slot is updated
   };
+
+  const selectSlot = (slot: Slot) => {
+    console.log("Slot selected:", slot);
+    // Implement the logic to handle slot selection
+  };
+
+  const slots: Slot[] = [
+    { id: "1", name: "Slot 1" },
+    { id: "2", name: "Slot 2" },
+    // Add more slots as needed
+  ];
 
   return (
     <Container>
@@ -152,10 +167,11 @@ export default function DragGPT() {
           loading={state.matches("loading")}
           top={state.context.requestButtonPosition.top}
           left={state.context.requestButtonPosition.left}
-          onRequestClick={handleRequestClick}
-          onAddClick={handleAddClick}
-          onEditClick={handleEditClick}
+          onRequestClick={() => selectSlot(slots[0])}
+          onAddClick={() => selectSlot(slots[1])}
+          onEditClick={() => selectSlot(slots[2])}
           updatedSlots={handleUpdatedSlots}
+          selectSlot={selectSlot}
         />
       )}
       {state.matches("temp_response_message_box") && (

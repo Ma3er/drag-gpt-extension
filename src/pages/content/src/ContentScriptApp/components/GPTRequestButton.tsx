@@ -3,6 +3,7 @@ import { Tooltip, IconButton, Stack, Spinner } from '@chakra-ui/react';
 import { ChatIcon, AddIcon, EditIcon } from '@chakra-ui/icons';
 import useSelectedSlot from "@pages/content/src/ContentScriptApp/hooks/useSelectedSlot"; // Adjust the import path as needed
 import { SlotStorage } from "@pages/background/lib/storage/slotStorage"; // Added import for SlotStorage
+import slotListPageStateMachine from "@src/pages/popup/xState/slotListPageStateMachine";
 
 type Slot = {
   id: string;
@@ -18,6 +19,7 @@ type GPTRequestButtonProps = {
   onAddClick: (slot: Slot) => void;
   onEditClick: (slot: Slot) => void;
   updatedSlots: (slot: Slot) => void;
+  selectSlot: (slot: Slot) => void;
 } & ComponentPropsWithRef<"div">;
 
 const labelTextInlineStyle: CSSProperties = {
@@ -40,12 +42,23 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
   onAddClick,
   onEditClick,
   updatedSlots,
+  selectSlot,
   ...divProps
 }) => {
-  const { selectedSlot, updateSelectedSlot } = useSelectedSlot(); // Removed getAllSlots
+  const { updateSelectedSlot } = useSelectedSlot(); // Removed selectedSlot
   const [slots, setSlots] = useState<Slot[]>([]);
   const [selectedSlotId, setSelectedSlotId] = useState<string | undefined>(); // New state to track selected slot ID
 
+  const selectTheS ={
+    selectSlot: assign({
+      slots: (context, event) =>
+        context.slots.map((slot) => ({
+          ...slot,
+          isSelected: slot.id === event.data,
+        })),
+    }),
+  }
+  
   useEffect(() => {
     const fetchSlots = async () => {
       const allSlots = await SlotStorage.getAllSlots(); // Fetch slots directly from SlotStorage
@@ -56,8 +69,10 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
   }, []);
 
   const handleSlotClick = async (slot: Slot, callback: (slot: Slot) => void) => {
-    await updateSelectedSlot(slot.id); // Update selected slot
-    setSelectedSlotId(slot.id); // Update selected slot ID
+    if (slot.id !== selectedSlotId) {
+      await updateSelectedSlot(slot.id); // Update selected slot
+      setSelectedSlotId(slot.id); // Update selected slot ID
+    }
     callback(slot); // Ensure callback is called after state update
   };
 
