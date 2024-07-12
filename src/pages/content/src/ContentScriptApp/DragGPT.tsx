@@ -136,43 +136,43 @@ function DragGPT() {
   };
 
   const handleRequestClick = (slot: Slot) => {
-    console.log("Chat 1 🍎 default Clicked:", slot);
-    console.log("Current selectedSlot:", selectedSlot);
+    console.log("↗️Chat 1 🍎 default Clicked:", slot);
+    console.log("↗️Current selectedSlot:", selectedSlot);
     updateSelectedSlot(slot.id);
   };
-
+  
   const handleAddClick = (slot: Slot) => {
-    console.log("Chat 2 🍏 twitter Clicked:", slot);
-    console.log("Current selectedSlot:", selectedSlot);
-    updateSelectedSlot(slot.id);
+    console.log("↗️Chat 2 🍏 twitter Clicked:", slot);
+    console.log("↗️Current selectedSlot:", selectedSlot);
+    updateSelectedSlot(slot.id); // Ensure slot is used
   };
-
+  
   const handleEditClick = (slot: Slot) => {
-    console.log("Chat 3 🔵 x.com Clicked:", slot);
-    console.log("Current selectedSlot:", selectedSlot);
-    updateSelectedSlot(slot.id);
+    console.log("↗️Chat 3 🔵 x.com Clicked:", slot);
+    console.log("↗️Current selectedSlot:", selectedSlot);
+    updateSelectedSlot(slot.id); // Ensure slot is used
   };
-
+  
   const defaultSelectSlot = (slot: Slot) => {
-    console.log("Default selectSlot function called with slot:", slot);
-    console.log("Current selectedSlot ⭐:", selectedSlot);
+    console.log("↗️Default selectSlot function called with slot:", slot);
+    console.log("↗️Current selectedSlot ⭐:", selectedSlot);
   };
-
+  
   const handleUpdatedSlots = (slot: Slot) => {
-    console.log("Updated Slots ♻️:", slot);
-    console.log("Current selectedSlot🟢:", selectedSlot);
-    // Add your logic here
+    console.log("↗️Updated Slots ♻️:", slot);
+    console.log("↗️Current selectedSlot🟢:", selectedSlot);
+    // Add your logic here to use the slot parameter
   };
-
+  
   const requestGPT = () => {
-    console.log("Request GPT initiated");
-    console.log("requestGPT Current state before request:❌", state);
-    console.log("requestGPT Current slot before request::❌", selectedSlot);
+    console.log("↗️Request GPT initiated");
+    console.log("↗️requestGPT Current state before request:❌", state);
+    console.log("↗️requestGPT Current slot before request::❌", selectedSlot);
     send("REQUEST");
-    console.log("Current state after request: ✖️", state);
-    console.log("requestGPT AFTER Request slot ✖️:", selectedSlot);
+    console.log("↗️Current state after request: ✖️", state);
+    console.log("↗️requestGPT AFTER Request slot ✖️:", selectedSlot);
   };
-
+  
   return (
     <Container>
       {state.hasTag("showRequestButton") && (
