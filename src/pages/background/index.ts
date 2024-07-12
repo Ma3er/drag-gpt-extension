@@ -16,7 +16,7 @@ import { ChatHistoryStorage } from "@pages/background/lib/storage/chatHistorySto
 
 reloadOnUpdate("pages/background");
 
-type RequiredDataNullableInput<T extends Message> = {
+export type RequiredDataNullableInput<T extends Message> = {
   type: T["type"];
   input?: unknown;
   data: Exclude<T["data"], undefined>;
@@ -276,3 +276,9 @@ chrome.runtime.onConnect.addListener((port) => {
     }
   });
 });
+
+// for GPTRequestButton.tsx
+export const getSelectedSlot = async (): Promise<Slot | undefined> => {
+  const slots = await SlotStorage.getAllSlots();
+  return slots.find(slot => slot.isSelected);
+};

@@ -1,9 +1,7 @@
 import React, { CSSProperties, ComponentPropsWithRef, useEffect, useState } from 'react';
 import { Tooltip, IconButton, Stack, Spinner } from '@chakra-ui/react';
 import { ChatIcon, AddIcon, EditIcon } from '@chakra-ui/icons';
-import useSelectedSlot from "@pages/content/src/ContentScriptApp/hooks/useSelectedSlot"; // Adjust the import path as needed
-import { SlotStorage } from "@pages/background/lib/storage/slotStorage"; // Added import for SlotStorage
-import slotListPageStateMachine from "@src/pages/popup/xState/slotListPageStateMachine";
+import { SlotStorage } from "@pages/background/lib/storage/slotStorage";
 
 type Slot = {
   id: string;
@@ -45,35 +43,34 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
   selectSlot,
   ...divProps
 }) => {
-  const { updateSelectedSlot } = useSelectedSlot(); // Removed selectedSlot
   const [slots, setSlots] = useState<Slot[]>([]);
-  const [selectedSlotId, setSelectedSlotId] = useState<string | undefined>(); // New state to track selected slot ID
+  const [selectedSlotId, setSelectedSlotId] = useState<string | undefined>();
 
-  const selectTheS ={
-    selectSlot: assign({
-      slots: (context, event) =>
-        context.slots.map((slot) => ({
-          ...slot,
-          isSelected: slot.id === event.data,
-        })),
-    }),
-  }
-  
   useEffect(() => {
     const fetchSlots = async () => {
-      const allSlots = await SlotStorage.getAllSlots(); // Fetch slots directly from SlotStorage
-      setSlots(allSlots.slice(0, 3)); // Get top 3 slots
+      const allSlots = await SlotStorage.getAllSlots();
+      setSlots(allSlots.slice(0, 3));
     };
 
     fetchSlots();
   }, []);
 
+  const updateSelectedSlot = async (slotId: string) => {
+    const slots = await SlotStorage.getAllSlots();
+    const updatedSlots = slots.map(slot => ({
+      ...slot,
+      isSelected: slot.id === slotId,
+    }));
+    await SlotStorage.setAllSlots(updatedSlots);
+    setSelectedSlotId(slotId);
+  };
+
   const handleSlotClick = async (slot: Slot, callback: (slot: Slot) => void) => {
     if (slot.id !== selectedSlotId) {
-      await updateSelectedSlot(slot.id); // Update selected slot
-      setSelectedSlotId(slot.id); // Update selected slot ID
+      await updateSelectedSlot(slot.id);
+      await selectSlot(slot);
     }
-    callback(slot); // Ensure callback is called after state update
+    callback(slot);
   };
 
   return (
@@ -92,13 +89,14 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
                   aria-label="request"
                   icon={<ChatIcon />}
                   size="xs"
-                  colorScheme={slots[0]?.id === selectedSlotId ? "blue" : "teal"} // Use selectedSlotId to determine isSelected
+                  colorScheme={slots[0]?.id === selectedSlotId ? "orange" : "teal"}
                   onClick={() => {
                     console.log('ChatIcon IconButton clicked:', slots[0]);
                     handleSlotClick(slots[0], onRequestClick);
                   }}
                   variant="outline"
                   border="2px"
+                  backgroundColor={slots[0]?.id === selectedSlotId ? "orange.100" : "transparent"}
                 />
               </Tooltip>
               <Tooltip label={slots[1]?.name}>
@@ -106,13 +104,14 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
                   aria-label="add"
                   icon={<AddIcon />}
                   size="xs"
-                  colorScheme={slots[1]?.id === selectedSlotId ? "blue" : "teal"} // Use selectedSlotId to determine isSelected
+                  colorScheme={slots[1]?.id === selectedSlotId ? "orange" : "teal"}
                   onClick={() => {
                     console.log('AddIcon IconButton clicked:', slots[1]);
                     handleSlotClick(slots[1], onAddClick);
                   }}
                   variant="outline"
                   border="2px"
+                  backgroundColor={slots[1]?.id === selectedSlotId ? "orange.100" : "transparent"}
                 />
               </Tooltip>
               <Tooltip label={slots[2]?.name}>
@@ -120,13 +119,14 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
                   aria-label="edit"
                   icon={<EditIcon />}
                   size="xs"
-                  colorScheme={slots[2]?.id === selectedSlotId ? "blue" : "teal"} // Use selectedSlotId to determine isSelected
+                  colorScheme={slots[2]?.id === selectedSlotId ? "orange" : "teal"}
                   onClick={() => {
                     console.log('EditIcon IconButton clicked:', slots[2]);
                     handleSlotClick(slots[2], onEditClick);
                   }}
                   variant="outline"
                   border="2px"
+                  backgroundColor={slots[2]?.id === selectedSlotId ? "orange.100" : "transparent"}
                 />
               </Tooltip>
             </>

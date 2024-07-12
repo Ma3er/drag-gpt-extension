@@ -1,8 +1,5 @@
-import React, { useEffect } from "react";
-import {
-  getSelectionNodeRect,
-  getSelectionText,
-} from "@pages/content/src/ContentScriptApp/utils/selection";
+import { useEffect } from "react";
+
 import GPTRequestButton from "@pages/content/src/ContentScriptApp/components/GPTRequestButton";
 import ResponseMessageBox from "@pages/content/src/ContentScriptApp/components/messageBox/ResponseMessageBox";
 import ErrorMessageBox from "@pages/content/src/ContentScriptApp/components/messageBox/ErrorMessageBox";
@@ -17,16 +14,49 @@ import ChatText from "@src/shared/component/ChatText";
 import AssistantChat from "@src/shared/component/AssistantChat";
 import MessageBox from "@pages/content/src/ContentScriptApp/components/messageBox/MessageBox";
 import { t } from "@src/chrome/i18n";
-import slotListPageStateMachine from "@src/pages/popup/xState/slotListPageStateMachine";
 
+// Correctly import changeSlot
+import changeSlot from "@src/pages/popup/xState/slotListPageStateMachine";
+
+// Ensure RequiredDataNullableInput is exported
+import { RequiredDataNullableInput } from "@src/pages/background/index";
+
+// Original Container styled component
 const Container = styled.div`
   * {
     font-family: "Noto Sans KR", sans-serif;
   }
 `;
 
+// Original Slot interface
+interface Slot {
+  id: string;
+  name: string;
+  isSelected?: boolean;
+  // Add other properties as needed
+}
+
+// Original skipLoopCycleOnce function
 const skipLoopCycleOnce = async () => await delayPromise(1);
 
+// Original getSelectionText function
+const getSelectionText = () => {
+  const selection = window.getSelection();
+  return selection ? selection.toString() : "";
+};
+
+// Original getSelectionNodeRect function
+const getSelectionNodeRect = () => {
+  const selection = window.getSelection();
+  if (selection && selection.rangeCount > 0) {
+    const range = selection.getRangeAt(0);
+    const rect = range.getBoundingClientRect();
+    return rect;
+  }
+  return null;
+};
+
+// Original getGPTResponseAsStream function
 async function getGPTResponseAsStream({
   input,
   onDelta,
@@ -54,14 +84,8 @@ async function getGPTResponseAsStream({
   });
 }
 
-interface Slot {
-  id: string;
-  name: string;
-  isSelected?: boolean;
-  // Add other properties as needed
-}
-
-export default function DragGPT() {
+// New DragGPT component
+function DragGPT() {
   const { selectedSlot, updateSelectedSlot } = useSelectedSlot();
   const [state, send] = useMachine(dragStateMachine, {
     actions: {
@@ -107,57 +131,45 @@ export default function DragGPT() {
     };
   }, [send]);
 
-  const requestGPT = async () => {
-    if (!selectedSlot) {
-      console.error("No slot selected");
-      return;
-    }
-    console.log("Requesting GPT with slot:", selectedSlot);
-    send("REQUEST");
-  };
-
   const closeMessageBox = () => {
     send("CLOSE_MESSAGE_BOX");
   };
 
-  const handleRequestClick = async (slot: Slot) => {
+  const handleRequestClick = (slot: Slot) => {
     console.log("Request Clicked:", slot);
-    const newSelectedSlot = await updateSelectedSlot(slot.id);
-    console.log("New selected slot RequestClick:", newSelectedSlot);
-    requestGPT(); // Ensure the request is made after the slot is updated
+    console.log("Current selectedSlot:", selectedSlot);
+    updateSelectedSlot(slot.id);
   };
 
-  const handleAddClick = async (slot: Slot) => {
+  const handleAddClick = (slot: Slot) => {
     console.log("Add Clicked:", slot);
-    const newSelectedSlot = await updateSelectedSlot(slot.id);
-    console.log("New selected slot AddClick:", newSelectedSlot);
-    requestGPT(); // Ensure the request is made after the slot is updated
+    console.log("Current selectedSlot:", selectedSlot);
+    updateSelectedSlot(slot.id);
   };
 
-  const handleEditClick = async (slot: Slot) => {
+  const handleEditClick = (slot: Slot) => {
     console.log("Edit Clicked:", slot);
-    const newSelectedSlot = await updateSelectedSlot(slot.id);
-    console.log("New selected slot EditClick:", newSelectedSlot);
-    requestGPT(); // Ensure the request is made after the slot is updated
+    console.log("Current selectedSlot:", selectedSlot);
+    updateSelectedSlot(slot.id);
   };
 
-  const handleUpdatedSlots = async (slot: Slot) => {
+  const defaultSelectSlot = (slot: Slot) => {
+    console.log("Default selectSlot function called with slot:", slot);
+    console.log("Current selectedSlot:", selectedSlot);
+  };
+
+  const handleUpdatedSlots = (slot: Slot) => {
     console.log("Updated Slots:", slot);
-    const newSelectedSlot = await updateSelectedSlot(slot.id);
-    console.log("Using new slot UpdatedSlots:", newSelectedSlot);
-    requestGPT(); // Ensure the request is made after the slot is updated
+    console.log("Current selectedSlot:", selectedSlot);
+    // Add your logic here
   };
 
-  const selectSlot = (slot: Slot) => {
-    console.log("Slot selected:", slot);
-    // Implement the logic to handle slot selection
+  const requestGPT = () => {
+    console.log("Request GPT initiated");
+    console.log("Current state before request:", state);
+    send("REQUEST");
+    console.log("Current state after request:", state);
   };
-
-  const slots: Slot[] = [
-    { id: "1", name: "Slot 1" },
-    { id: "2", name: "Slot 2" },
-    // Add more slots as needed
-  ];
 
   return (
     <Container>
@@ -167,11 +179,11 @@ export default function DragGPT() {
           loading={state.matches("loading")}
           top={state.context.requestButtonPosition.top}
           left={state.context.requestButtonPosition.left}
-          onRequestClick={() => selectSlot(slots[0])}
-          onAddClick={() => selectSlot(slots[1])}
-          onEditClick={() => selectSlot(slots[2])}
+          onRequestClick={handleRequestClick}
+          onAddClick={handleAddClick}
+          onEditClick={handleEditClick}
           updatedSlots={handleUpdatedSlots}
-          selectSlot={selectSlot}
+          selectSlot={selectedSlot ? (slot: Slot) => selectedSlot : defaultSelectSlot}
         />
       )}
       {state.matches("temp_response_message_box") && (
@@ -214,3 +226,5 @@ export default function DragGPT() {
     </Container>
   );
 }
+
+export default DragGPT;
