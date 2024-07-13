@@ -136,19 +136,19 @@ function DragGPT() {
   };
 
   const handleRequestClick = (slot: Slot) => {
-    console.log("↗️Chat 1 🍎 default Clicked:", slot);
+    console.log("↗️Chat 1 🟨 default Clicked:", slot);
     console.log("↗️Current selectedSlot:", selectedSlot);
     updateSelectedSlot(slot.id);
   };
   
   const handleAddClick = (slot: Slot) => {
-    console.log("↗️Chat 2 🍏 twitter Clicked:", slot);
+    console.log("↗️Chat 2 🟩 twitter Clicked:", slot);
     console.log("↗️Current selectedSlot:", selectedSlot);
     updateSelectedSlot(slot.id); // Ensure slot is used
   };
   
   const handleEditClick = (slot: Slot) => {
-    console.log("↗️Chat 3 🔵 x.com Clicked:", slot);
+    console.log("↗️Chat 3 🟥 x.com Clicked:", slot);
     console.log("↗️Current selectedSlot:", selectedSlot);
     updateSelectedSlot(slot.id); // Ensure slot is used
   };
