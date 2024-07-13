@@ -78,17 +78,17 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
         border: "2px solid teal",
         padding: 4,
         boxShadow: "dark-lg",
-        zIndex: 1000,
+        zIndex: 9999,
       }}
       {...divProps}
     >
       {loading ? (
-        <Spinner color="red.500" />
+        <Spinner color='blue.500' emptyColor='gray.200' />
       ) : (
         <Stack direction="row" spacing={4}>
           {slots.length > 0 && (
             <>
-              <Tooltip label={slots[0]?.name}>
+              <Tooltip label={slots[0]?.name} bg='gray.700' color='black'>
                 <IconButton
                   aria-label="button0"
                   icon={<ChatIcon />}
@@ -104,7 +104,7 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
                   }
                 />
               </Tooltip>
-              <Tooltip label={slots[1]?.name}>
+              <Tooltip label={slots[1]?.name} bg='gray.700' color='black'>
                 <IconButton
                   aria-label="button1"
                   icon={<ChatIcon />}
@@ -120,7 +120,7 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
                   }
                 />
               </Tooltip>
-              <Tooltip label={slots[2]?.name}>
+              <Tooltip label={slots[2]?.name} bg='gray.700' color='black'>
                 <IconButton
                   aria-label="button2"
                   icon={<ChatIcon />}
@@ -136,7 +136,7 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
                   }
                 />
               </Tooltip>
-              <Tooltip label={slots[3]?.name}>
+              <Tooltip label={slots[3]?.name} bg='gray.700' color='black'>
                 <IconButton
                   aria-label="button3"
                   icon={<ChatIcon />}
