@@ -40,7 +40,7 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
   useEffect(() => {
     const fetchSlots = async () => {
       const allSlots = await SlotStorage.getAllSlots();
-      setSlots(allSlots.slice(0, 3));
+      setSlots(allSlots.slice(0, 4));
     };
 
     fetchSlots();
@@ -76,6 +76,9 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
         borderRadius: '6px',
         border: '2px solid teal',
         padding: 4,
+        boxShadow: 'dark-lg',
+        zIndex: 1000,
+
       }}
       {...divProps}
     >
@@ -119,6 +122,18 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
                   variant="outline"
                   border="2px"
                   backgroundColor={slots[2]?.id === selectedSlotId ? "orange" : "transparent"}
+                />
+                </Tooltip>
+              <Tooltip label={slots[3]?.name}>
+                <IconButton
+                  aria-label="button4"
+                  icon={<ChatIcon />}
+                  size="xs"
+                  colorScheme={slots[1]?.id === selectedSlotId ? "orange" : "teal"}
+                  onClick={() => handleSlotClick(slots[3], onAddClick)}
+                  variant="outline"
+                  border="2px"
+                  backgroundColor={slots[1]?.id === selectedSlotId ? "orange" : "transparent"}
                 />
               </Tooltip>
             </>
