@@ -1,6 +1,13 @@
 import { render } from '@testing-library/react';
 import GPTRequestButton from './GPTRequestButton';
 
+const mockSlot = {
+  id: '1',
+  name: 'Mock Slot',
+  isSelected: true,
+  type: 'gpt4-turbo' as const
+};
+
 test('renders GPTRequestButton', () => {
   render(
     <GPTRequestButton
@@ -10,8 +17,9 @@ test('renders GPTRequestButton', () => {
       onRequestClick={() => { }}
       onAddClick={() => { }}
       onEditClick={() => { }}
-      updatedSlots={() => { }} // Add this line
-      selectSlot={() => { }} // Add this line
+      updatedSlots={() => { }}
+      selectSlot={() => { }}
+      selectedSlot={mockSlot}
     />
   );
 });
@@ -25,8 +33,9 @@ test('renders GPTRequestButton with loading', () => {
       onRequestClick={() => { }}
       onAddClick={() => { }}
       onEditClick={() => { }}
-      updatedSlots={() => { }} // Add this line
-      selectSlot={() => { }} // Add this line
+      updatedSlots={() => { }}
+      selectSlot={() => { }}
+      selectedSlot={mockSlot}
     />
   );
 });

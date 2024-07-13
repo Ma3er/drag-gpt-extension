@@ -1,5 +1,4 @@
-import { useEffect } from "react";
-
+import { useEffect, useState } from "react";
 import GPTRequestButton from "@pages/content/src/ContentScriptApp/components/GPTRequestButton";
 import ResponseMessageBox from "@pages/content/src/ContentScriptApp/components/messageBox/ResponseMessageBox";
 import ErrorMessageBox from "@pages/content/src/ContentScriptApp/components/messageBox/ErrorMessageBox";
@@ -110,6 +109,8 @@ function DragGPT() {
     devTools: true,
   });
 
+  const [requestPending, setRequestPending] = useState(false);
+
   useEffect(() => {
     const onMouseUp = async (event: MouseEvent) => {
       await skipLoopCycleOnce();
@@ -131,61 +132,64 @@ function DragGPT() {
     };
   }, [send]);
 
+  useEffect(() => {
+    if (requestPending && selectedSlot) {
+      console.log("↗️Request GPT initiated");
+      console.log("↗️❌requestGPT Current state before request:❌", state, selectedSlot);
+      send("REQUEST");
+      console.log("↗️✖️Current state after request: ✖️", state, selectedSlot);
+      setRequestPending(false);
+    }
+  }, [selectedSlot, requestPending, state, send]);
+
   const closeMessageBox = () => {
     send("CLOSE_MESSAGE_BOX");
   };
 
-  const handleRequestClick = (slot: Slot) => {
-    console.log("↗️Chat 1 🟨 default Clicked:", slot);
+  const handleRequestClick = async (slot: Slot) => {
+    console.log("↗️Chat 1 🟨 default 🟨Clicked:", slot);
     console.log("↗️Current selectedSlot:", selectedSlot);
-    updateSelectedSlot(slot.id);
+    await updateSelectedSlot(slot.id);
+    setRequestPending(true);
   };
-  
-  const handleAddClick = (slot: Slot) => {
-    console.log("↗️Chat 2 🟩 twitter Clicked:", slot);
+
+  const handleAddClick = async (slot: Slot) => {
+    console.log("↗️Chat 2 🟩 twitter 🟩 Clicked:", slot);
     console.log("↗️Current selectedSlot:", selectedSlot);
-    updateSelectedSlot(slot.id); // Ensure slot is used
+    await updateSelectedSlot(slot.id);
+    setRequestPending(true);
   };
-  
-  const handleEditClick = (slot: Slot) => {
-    console.log("↗️Chat 3 🟥 x.com Clicked:", slot);
+
+  const handleEditClick = async (slot: Slot) => {
+    console.log("↗️Chat 3 🟥 x.com 🟥Clicked:", slot);
     console.log("↗️Current selectedSlot:", selectedSlot);
-    updateSelectedSlot(slot.id); // Ensure slot is used
+    await updateSelectedSlot(slot.id);
+    setRequestPending(true);
   };
-  
+
   const defaultSelectSlot = (slot: Slot) => {
     console.log("↗️Default selectSlot function called with slot:", slot);
     console.log("↗️Current selectedSlot ⭐:", selectedSlot);
   };
-  
+
   const handleUpdatedSlots = (slot: Slot) => {
     console.log("↗️Updated Slots ♻️:", slot);
     console.log("↗️Current selectedSlot🟢:", selectedSlot);
-    // Add your logic here to use the slot parameter
   };
-  
-  const requestGPT = () => {
-    console.log("↗️Request GPT initiated");
-    console.log("↗️requestGPT Current state before request:❌", state);
-    console.log("↗️requestGPT Current slot before request::❌", selectedSlot);
-    send("REQUEST");
-    console.log("↗️Current state after request: ✖️", state);
-    console.log("↗️requestGPT AFTER Request slot ✖️:", selectedSlot);
-  };
-  
+
   return (
     <Container>
       {state.hasTag("showRequestButton") && (
         <GPTRequestButton
-          onClick={requestGPT}
-          loading={state.matches("loading")}
           top={state.context.requestButtonPosition.top}
           left={state.context.requestButtonPosition.left}
+          loading={state.matches("loading")}
           onRequestClick={handleRequestClick}
           onAddClick={handleAddClick}
           onEditClick={handleEditClick}
           updatedSlots={handleUpdatedSlots}
-          selectSlot={selectedSlot ? (slot: Slot) => selectedSlot : defaultSelectSlot}
+          selectSlot={selectedSlot ? () => selectedSlot : defaultSelectSlot}
+          selectedSlot={selectedSlot}
         />
       )}
       {state.matches("temp_response_message_box") && (

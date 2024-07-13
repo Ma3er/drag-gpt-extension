@@ -282,3 +282,7 @@ export const getSelectedSlot = async (): Promise<Slot | undefined> => {
   const slots = await SlotStorage.getAllSlots();
   return slots.find(slot => slot.isSelected);
 };
+// my export aetAllSlots function
+export const getAllSlots = async (): Promise<Slot[]> => {
+  return await SlotStorage.getAllSlots();
+};

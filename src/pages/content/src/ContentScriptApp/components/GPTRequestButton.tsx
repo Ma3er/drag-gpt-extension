@@ -1,14 +1,13 @@
 import React, { CSSProperties, ComponentPropsWithRef, useEffect, useState } from 'react';
 import { Tooltip, IconButton, Stack, Spinner } from '@chakra-ui/react';
 import { ChatIcon, AddIcon, EditIcon } from '@chakra-ui/icons';
-import useSelectedSlot from '@pages/content/src/ContentScriptApp/hooks/useSelectedSlot';
 import { SlotStorage } from '@pages/background/lib/storage/slotStorage';
 
 type Slot = {
   id: string;
   name: string;
   isSelected?: boolean;
-  type: "gpt4-turbo" | "gpt4o"; // Ensure this matches the actual type values
+  type: "gpt4-turbo" | "gpt4o";
 };
 
 type GPTRequestButtonProps = {
@@ -20,19 +19,8 @@ type GPTRequestButtonProps = {
   onEditClick: (slot: Slot) => void;
   updatedSlots: (slot: Slot) => void;
   selectSlot: (slot: Slot) => void;
+  selectedSlot: Slot | null;
 } & ComponentPropsWithRef<"div">;
-
-const labelTextInlineStyle: CSSProperties = {
-  display: "block",
-  fontSize: "13px",
-  lineHeight: 1,
-  margin: 0,
-  maxWidth: "160px",
-  overflow: "hidden",
-  whiteSpace: "nowrap",
-  textOverflow: "ellipsis",
-  fontFamily: "Noto Sans KR, sans-serif",
-};
 
 const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
   top,
@@ -43,9 +31,9 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
   onEditClick,
   updatedSlots,
   selectSlot,
+  selectedSlot,
   ...divProps
 }) => {
-  const { selectedSlot, updateSelectedSlot: updateHookSelectedSlot } = useSelectedSlot();
   const [slots, setSlots] = useState<Slot[]>([]);
   const [selectedSlotId, setSelectedSlotId] = useState<string | undefined>();
 
@@ -54,34 +42,43 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
       const allSlots = await SlotStorage.getAllSlots();
       setSlots(allSlots.slice(0, 3));
     };
-  
+
     fetchSlots();
   }, []);
-  
+
   const updateSelectedSlot = async (slotId: string) => {
     console.log('🔄 Updating selected slot to:', slotId);
     const slots = await SlotStorage.getAllSlots();
-    const updatedSlots = slots.map((slot: Slot) => ({
+    const updatedSlots = slots.map(slot => ({
       ...slot,
       isSelected: slot.id === slotId,
-      type: slot.type // Ensure the type is included
     }));
     await SlotStorage.setAllSlots(updatedSlots);
     setSelectedSlotId(slotId);
     console.log('✅ Updated slots:', updatedSlots);
     console.log('🔵 New selectedSlotId:', slotId);
   };
-  
+
   const handleSlotClick = async (slot: Slot, callback: (slot: Slot) => void) => {
     if (slot.id !== selectedSlotId) {
       await updateSelectedSlot(slot.id);
-      await updateHookSelectedSlot(slot.id); // Ensure the hook's state is also updated
     }
     callback(slot);
   };
 
   return (
-    <div style={{ position: 'absolute', top, left, background: 'white', borderRadius: '6px', border: '2px solid', borderColor: 'teal', padding: 4 }} {...divProps}>
+    <div
+      style={{
+        position: 'absolute',
+        top,
+        left,
+        background: 'white',
+        borderRadius: '6px',
+        border: '2px solid teal',
+        padding: 4,
+      }}
+      {...divProps}
+    >
       {loading ? (
         <Spinner color='red.500' />
       ) : (
