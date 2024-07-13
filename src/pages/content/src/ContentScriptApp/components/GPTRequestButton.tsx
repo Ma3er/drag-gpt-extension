@@ -68,7 +68,7 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
 
   return (
     <div
-      style={{
+      style={{  // CSSProperties for background 
         position: 'absolute',
         top,
         left,
@@ -80,7 +80,7 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
       {...divProps}
     >
       {loading ? (
-        <Spinner color='red.500' />
+        <Spinner color='green.500' />
       ) : (
         <Stack direction="row" spacing={4}>
           {slots.length > 0 && (
