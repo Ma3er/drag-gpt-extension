@@ -2,8 +2,7 @@ import React, { CSSProperties, ComponentPropsWithRef, useEffect, useState } from
 import { Tooltip, IconButton, Stack, Spinner } from "@chakra-ui/react";
 import { ChatIcon, AddIcon, EditIcon } from "@chakra-ui/icons";
 import { SlotStorage } from "@pages/background/lib/storage/slotStorage";
-import { AiFillTwitterCircle } from "react-icons/ai";
-
+import { MdSettings } from "react-icons/md";
 
 type Slot = {
   id: string;
@@ -80,7 +79,6 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
         padding: 4,
         boxShadow: "dark-lg",
         zIndex: 1000,
-
       }}
       {...divProps}
     >
@@ -92,50 +90,66 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
             <>
               <Tooltip label={slots[0]?.name}>
                 <IconButton
-                  aria-label="request"
+                  aria-label="button0"
                   icon={<ChatIcon />}
                   size="xs"
-                  colorScheme={slots[0]?.id === selectedSlotId ? "orange" : "teal"}
-                  onClick={() => handleSlotClick(slots[0], onRequestClick)}
+                  colorScheme={
+                    slots[0]?.id === selectedSlotId ? "orange" : "teal"
+                  }
+                  onClick={() => handleSlotClick(slots[0], onAddClick)}
                   variant="outline"
                   border="2px"
-                  backgroundColor={slots[0]?.id === selectedSlotId ? "orange" : "transparent"}
+                  backgroundColor={
+                    slots[0]?.id === selectedSlotId ? "orange" : "transparent"
+                  }
                 />
               </Tooltip>
               <Tooltip label={slots[1]?.name}>
                 <IconButton
-                  aria-label="add"
-                  icon={<AddIcon />}
+                  aria-label="button1"
+                  icon={<ChatIcon />}
                   size="xs"
-                  colorScheme={slots[1]?.id === selectedSlotId ? "orange" : "teal"}
+                  colorScheme={
+                    slots[1]?.id === selectedSlotId ? "orange" : "teal"
+                  }
                   onClick={() => handleSlotClick(slots[1], onAddClick)}
                   variant="outline"
                   border="2px"
-                  backgroundColor={slots[1]?.id === selectedSlotId ? "orange" : "transparent"}
+                  backgroundColor={
+                    slots[1]?.id === selectedSlotId ? "orange" : "transparent"
+                  }
                 />
               </Tooltip>
               <Tooltip label={slots[2]?.name}>
                 <IconButton
-                  aria-label="edit"
-                  icon={<EditIcon />}
+                  aria-label="button2"
+                  icon={<ChatIcon />}
                   size="xs"
-                  colorScheme={slots[2]?.id === selectedSlotId ? "orange" : "teal"}
-                  onClick={() => handleSlotClick(slots[2], onEditClick)}
+                  colorScheme={
+                    slots[2]?.id === selectedSlotId ? "orange" : "teal"
+                  }
+                  onClick={() => handleSlotClick(slots[2], onAddClick)}
                   variant="outline"
                   border="2px"
-                  backgroundColor={slots[2]?.id === selectedSlotId ? "orange" : "transparent"}
+                  backgroundColor={
+                    slots[2]?.id === selectedSlotId ? "orange" : "transparent"
+                  }
                 />
               </Tooltip>
               <Tooltip label={slots[3]?.name}>
                 <IconButton
-                  aria-label="button4"
-                  icon={<AiFillTwitterCircle />}
-                  size="m"
-                  colorScheme={slots[3]?.id === selectedSlotId ? "orange" : "teal"}
-                  onClick={() => handleSlotClick(slots[3], onEditClick)}
+                  aria-label="button3"
+                  icon={<ChatIcon />}
+                  size="xs"
+                  colorScheme={
+                    slots[3]?.id === selectedSlotId ? "orange" : "teal"
+                  }
+                  onClick={() => handleSlotClick(slots[3], onAddClick)}
                   variant="outline"
                   border="2px"
-                  backgroundColor="transparent"
+                  backgroundColor={
+                    slots[3]?.id === selectedSlotId ? "orange" : "transparent"
+                  }
                 />
               </Tooltip>
             </>
@@ -144,6 +158,6 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
       )}
     </div>
   );
-}
+};
 
 export default GPTRequestButton;
