@@ -169,7 +169,7 @@ function DragGPT() {
 
   const defaultSelectSlot = (slot: Slot) => {
     console.log("↗️Default selectSlot function called with slot:", slot);
-    console.log("↗️Current selectedSlot ⭐:", selectedSlot);
+    console.log("↗️Current ⭐selectedSlot ⭐:", selectedSlot);
   };
 
   const handleUpdatedSlots = (slot: Slot) => {
