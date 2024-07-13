@@ -83,7 +83,7 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
   return (
     <div style={{ position: 'absolute', top, left, background: 'white', borderRadius: '6px', border: '2px solid', borderColor: 'teal', padding: 4 }} {...divProps}>
       {loading ? (
-        <Spinner size="xs" />
+        <Spinner color='red.500' />
       ) : (
         <Stack direction="row" spacing={4}>
           {slots.length > 0 && (
@@ -97,7 +97,7 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
                   onClick={() => handleSlotClick(slots[0], onRequestClick)}
                   variant="outline"
                   border="2px"
-                  backgroundColor={slots[0]?.id === selectedSlotId ? "orange.100" : "transparent"}
+                  backgroundColor={slots[0]?.id === selectedSlotId ? "orange" : "transparent"}
                 />
               </Tooltip>
               <Tooltip label={slots[1]?.name}>
@@ -109,7 +109,7 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
                   onClick={() => handleSlotClick(slots[1], onAddClick)}
                   variant="outline"
                   border="2px"
-                  backgroundColor={slots[1]?.id === selectedSlotId ? "orange.100" : "transparent"}
+                  backgroundColor={slots[1]?.id === selectedSlotId ? "orange" : "transparent"}
                 />
               </Tooltip>
               <Tooltip label={slots[2]?.name}>
@@ -121,7 +121,7 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
                   onClick={() => handleSlotClick(slots[2], onEditClick)}
                   variant="outline"
                   border="2px"
-                  backgroundColor={slots[2]?.id === selectedSlotId ? "orange.100" : "transparent"}
+                  backgroundColor={slots[2]?.id === selectedSlotId ? "orange" : "transparent"}
                 />
               </Tooltip>
             </>
