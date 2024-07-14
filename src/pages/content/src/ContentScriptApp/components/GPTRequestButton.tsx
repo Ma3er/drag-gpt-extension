@@ -1,8 +1,13 @@
 import React, { CSSProperties, ComponentPropsWithRef, useEffect, useState } from "react";
+import styled from "@emotion/styled";
+import { COLORS, Z_INDEX } from "@src/constant/style";
 import { Tooltip, IconButton, Stack, Spinner } from "@chakra-ui/react";
-import { ChatIcon, AddIcon, EditIcon } from "@chakra-ui/icons";
+import { ChatIcon, AddIcon, EditIcon, CopyIcon } from "@chakra-ui/icons";
 import { SlotStorage } from "@pages/background/lib/storage/slotStorage";
-import { MdSettings } from "react-icons/md";
+
+const handleCopyToClipboard = (text: string) => {
+  navigator.clipboard.writeText(text);
+};
 
 type Slot = {
   id: string;
@@ -37,6 +42,7 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
 }) => {
   const [slots, setSlots] = useState<Slot[]>([]);
   const [selectedSlotId, setSelectedSlotId] = useState<string | undefined>();
+  const [selectedText, setSelectedText] = useState('');
 
   useEffect(() => {
     const fetchSlots = async () => {
@@ -67,6 +73,11 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
     callback(slot);
   };
 
+  const handleTextSelection = () => {
+    const text = window.getSelection()?.toString() || '';
+    setSelectedText(text);
+  };
+
   return (
     <div
       style={{
@@ -79,15 +90,28 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
         padding: 4,
         boxShadow: "dark-lg",
         zIndex: 9999,
+        fontSize: 'xs',
       }}
       {...divProps}
+      onMouseUp={handleTextSelection} // Add this to capture text selection
     >
       {loading ? (
         <Spinner color='red.500' />
       ) : (
-        <Stack direction="row" spacing={4}>
+        <Stack direction="row" spacing={3}>
           {slots.length > 0 && (
             <>
+              <Tooltip label="Clipboard" fontSize='xs' bg='gray.700' color='black' >
+                <IconButton
+                  aria-label="Copy to Clipboard"
+                  icon={<CopyIcon />}
+                  size="xs"
+                  colorScheme="blue"
+                  onClick={() => handleCopyToClipboard(selectedText)}
+                  variant="outline"
+                  border="2px"
+                />
+              </Tooltip>
               <Tooltip label={slots[0]?.name} bg='gray.700' color='black'>
                 <IconButton
                   aria-label="button0"
