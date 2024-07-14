@@ -16,11 +16,7 @@ import { ChatHistoryStorage } from "@pages/background/lib/storage/chatHistorySto
 
 reloadOnUpdate("pages/background");
 
-<<<<<<< HEAD
 export type RequiredDataNullableInput<T extends Message> = {
-=======
-type RequiredDataNullableInput<T extends Message> = {
->>>>>>> 2cd2bd140c362c9499975d59ee798fcb3d5e282a
   type: T["type"];
   input?: unknown;
   data: Exclude<T["data"], undefined>;
@@ -280,7 +276,6 @@ chrome.runtime.onConnect.addListener((port) => {
     }
   });
 });
-<<<<<<< HEAD
 
 // for GPTRequestButton.tsx
 export const getSelectedSlot = async (): Promise<Slot | undefined> => {
@@ -291,5 +286,3 @@ export const getSelectedSlot = async (): Promise<Slot | undefined> => {
 export const getAllSlots = async (): Promise<Slot[]> => {
   return await SlotStorage.getAllSlots();
 };
-=======
->>>>>>> 2cd2bd140c362c9499975d59ee798fcb3d5e282a

@@ -98,9 +98,20 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
       {loading ? (
         <Spinner color='red.500' />
       ) : (
-        <Stack direction="row" spacing={4}>
+        <Stack direction="row" spacing={3}>
           {slots.length > 0 && (
             <>
+              <Tooltip label="Clipboard" fontSize='xs' bg='gray.700' color='black' >
+                <IconButton
+                  aria-label="Copy to Clipboard"
+                  icon={<CopyIcon />}
+                  size="xs"
+                  colorScheme="blue"
+                  onClick={() => handleCopyToClipboard(selectedText)}
+                  variant="outline"
+                  border="2px"
+                />
+              </Tooltip>
               <Tooltip label={slots[0]?.name} bg='gray.700' color='black'>
                 <IconButton
                   aria-label="button0"

@@ -11,11 +11,7 @@ export class SlotsManipulatorService {
   static addSlot(slots: Slot[], slot: Slot): Slot[] {
     return [...slots, slot];
   }
-<<<<<<< HEAD
 // this updateSlot is fot the update of the slot
-=======
-
->>>>>>> 2cd2bd140c362c9499975d59ee798fcb3d5e282a
   static updateSlot(slots: Slot[], slot: Slot): Slot[] {
     return slots.reduce<Slot[]>((previousValue, currentValue) => {
       if (currentValue.id === slot.id) {
