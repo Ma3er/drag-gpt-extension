@@ -47,7 +47,7 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
   }, []);
 
   const updateSelectedSlot = async (slotId: string) => {
-    console.log('🔄 Updating selected slot to:', slotId);
+    console.log('👉 Updating selected slot to:', slotId);
     const slots = await SlotStorage.getAllSlots();
     const updatedSlots = slots.map(slot => ({
       ...slot,
