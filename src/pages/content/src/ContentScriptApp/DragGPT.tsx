@@ -1,12 +1,4 @@
-<<<<<<< HEAD
 import { useEffect, useState } from "react";
-=======
-import { useEffect } from "react";
-import {
-  getSelectionNodeRect,
-  getSelectionText,
-} from "@pages/content/src/ContentScriptApp/utils/selection";
->>>>>>> 2cd2bd140c362c9499975d59ee798fcb3d5e282a
 import GPTRequestButton from "@pages/content/src/ContentScriptApp/components/GPTRequestButton";
 import ResponseMessageBox from "@pages/content/src/ContentScriptApp/components/messageBox/ResponseMessageBox";
 import ErrorMessageBox from "@pages/content/src/ContentScriptApp/components/messageBox/ErrorMessageBox";
@@ -22,7 +14,6 @@ import AssistantChat from "@src/shared/component/AssistantChat";
 import MessageBox from "@pages/content/src/ContentScriptApp/components/messageBox/MessageBox";
 import { t } from "@src/chrome/i18n";
 
-<<<<<<< HEAD
 // Correctly import changeSlot
 import changeSlot from "@src/pages/popup/xState/slotListPageStateMachine";
 
@@ -30,15 +21,12 @@ import changeSlot from "@src/pages/popup/xState/slotListPageStateMachine";
 import { RequiredDataNullableInput } from "@src/pages/background/index";
 
 // Original Container styled component
-=======
->>>>>>> 2cd2bd140c362c9499975d59ee798fcb3d5e282a
 const Container = styled.div`
   * {
     font-family: "Noto Sans KR", sans-serif;
   }
 `;
 
-<<<<<<< HEAD
 // Original Slot interface
 interface Slot {
   id: string;
@@ -68,23 +56,14 @@ const getSelectionNodeRect = () => {
 };
 
 // Original getGPTResponseAsStream function
-=======
-const skipLoopCycleOnce = async () => await delayPromise(1);
-
->>>>>>> 2cd2bd140c362c9499975d59ee798fcb3d5e282a
 async function getGPTResponseAsStream({
   input,
   onDelta,
   onFinish,
 }: {
   input: string;
-<<<<<<< HEAD
   onDelta: (delta: string) => void;
   onFinish: () => void;
-=======
-  onDelta: (chunk: string) => unknown;
-  onFinish: (result: string) => unknown;
->>>>>>> 2cd2bd140c362c9499975d59ee798fcb3d5e282a
 }) {
   return new Promise<{ firstChunk: string }>((resolve, reject) => {
     sendMessageToBackground({
@@ -94,11 +73,7 @@ async function getGPTResponseAsStream({
       },
       handleSuccess: (response) => {
         if (response.isDone || !response.chunk) {
-<<<<<<< HEAD
           return onFinish();
-=======
-          return onFinish(response.result);
->>>>>>> 2cd2bd140c362c9499975d59ee798fcb3d5e282a
         }
         resolve({ firstChunk: response.chunk });
         onDelta(response.chunk);
@@ -108,14 +83,9 @@ async function getGPTResponseAsStream({
   });
 }
 
-<<<<<<< HEAD
 // New DragGPT component
 function DragGPT() {
   const { selectedSlot, updateSelectedSlot } = useSelectedSlot();
-=======
-export default function DragGPT() {
-  const selectedSlot = useSelectedSlot();
->>>>>>> 2cd2bd140c362c9499975d59ee798fcb3d5e282a
   const [state, send] = useMachine(dragStateMachine, {
     actions: {
       setPositionOnScreen: (context) => {
@@ -136,7 +106,6 @@ export default function DragGPT() {
           onFinish: () => send("RECEIVE_END"),
         }),
     },
-<<<<<<< HEAD
     devTools: true,
   });
 
@@ -144,23 +113,12 @@ export default function DragGPT() {
 
   useEffect(() => {
     const onMouseUp = async (event: MouseEvent) => {
-=======
-  });
-
-  useEffect(() => {
-    const onMouseUp = async (event: MouseEvent) => {
-      /** Selection 이벤트 호출을 기다리는 해키한 코드 */
->>>>>>> 2cd2bd140c362c9499975d59ee798fcb3d5e282a
       await skipLoopCycleOnce();
       send({
         type: "TEXT_SELECTED",
         data: {
           selectedText: getSelectionText(),
-<<<<<<< HEAD
           selectedNodeRect: getSelectionNodeRect() || undefined,
-=======
-          selectedNodeRect: getSelectionNodeRect(),
->>>>>>> 2cd2bd140c362c9499975d59ee798fcb3d5e282a
           requestButtonPosition: {
             top: event.clientY + window.scrollY,
             left: event.clientX + window.scrollX,
@@ -168,15 +126,10 @@ export default function DragGPT() {
         },
       });
     };
-<<<<<<< HEAD
-=======
-
->>>>>>> 2cd2bd140c362c9499975d59ee798fcb3d5e282a
     window.document.addEventListener("mouseup", onMouseUp);
     return () => {
       window.document.removeEventListener("mouseup", onMouseUp);
     };
-<<<<<<< HEAD
   }, [send]);
 
   useEffect(() => {
@@ -188,19 +141,11 @@ export default function DragGPT() {
       setRequestPending(false);
     }
   }, [selectedSlot, requestPending, state, send]);
-=======
-  }, []);
-
-  const requestGPT = () => {
-    send("REQUEST");
-  };
->>>>>>> 2cd2bd140c362c9499975d59ee798fcb3d5e282a
 
   const closeMessageBox = () => {
     send("CLOSE_MESSAGE_BOX");
   };
 
-<<<<<<< HEAD
   const handleRequestClick = async (slot: Slot) => {
     console.log("↗️Chat 1 🟨 default 🟨Clicked:", slot);
     console.log("↗️Current selectedSlot:", selectedSlot);
@@ -232,13 +177,10 @@ export default function DragGPT() {
     console.log("↗️Current selectedSlot🟢:", selectedSlot);
   };
 
-=======
->>>>>>> 2cd2bd140c362c9499975d59ee798fcb3d5e282a
   return (
     <Container>
       {state.hasTag("showRequestButton") && (
         <GPTRequestButton
-<<<<<<< HEAD
           top={state.context.requestButtonPosition.top}
           left={state.context.requestButtonPosition.left}
           loading={state.matches("loading")}
@@ -247,12 +189,6 @@ export default function DragGPT() {
           onEditClick={handleEditClick}
           updatedSlots={handleUpdatedSlots}
           selectSlot={selectedSlot ? () => selectedSlot : defaultSelectSlot}
-=======
-          onClick={requestGPT}
-          loading={state.matches("loading")}
-          top={state.context.requestButtonPosition.top}
-          left={state.context.requestButtonPosition.left}
->>>>>>> 2cd2bd140c362c9499975d59ee798fcb3d5e282a
           selectedSlot={selectedSlot}
         />
       )}
@@ -296,8 +232,5 @@ export default function DragGPT() {
     </Container>
   );
 }
-<<<<<<< HEAD
 
 export default DragGPT;
-=======
->>>>>>> 2cd2bd140c362c9499975d59ee798fcb3d5e282a
