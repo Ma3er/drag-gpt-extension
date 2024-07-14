@@ -1,4 +1,5 @@
 import React, { CSSProperties, ComponentPropsWithRef, useEffect, useState } from "react";
+<<<<<<< HEAD
 import styled from "@emotion/styled";
 import { COLORS, Z_INDEX } from "@src/constant/style";
 import { Tooltip, IconButton, Stack, Spinner } from "@chakra-ui/react";
@@ -8,6 +9,12 @@ import { SlotStorage } from "@pages/background/lib/storage/slotStorage";
 const handleCopyToClipboard = (text: string) => {
   navigator.clipboard.writeText(text);
 };
+=======
+import { Tooltip, IconButton, Stack, Spinner } from "@chakra-ui/react";
+import { ChatIcon, AddIcon, EditIcon } from "@chakra-ui/icons";
+import { SlotStorage } from "@pages/background/lib/storage/slotStorage";
+import { MdSettings } from "react-icons/md";
+>>>>>>> 2cd2bd140c362c9499975d59ee798fcb3d5e282a
 
 type Slot = {
   id: string;
@@ -20,6 +27,7 @@ type GPTRequestButtonProps = {
   top: number;
   left: number;
   loading: boolean;
+<<<<<<< HEAD
   onRequestClick: (slot: Slot) => void;
   onAddClick: (slot: Slot) => void;
   onEditClick: (slot: Slot) => void;
@@ -37,12 +45,25 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
   onEditClick,
   updatedSlots,
   selectSlot,
+=======
+  selectedSlot?: Slot;
+} & ComponentPropsWithRef<"button">;
+
+export default function GPTRequestButton({
+  top,
+  left,
+  loading,
+  style,
+>>>>>>> 2cd2bd140c362c9499975d59ee798fcb3d5e282a
   selectedSlot,
   ...divProps
 }) => {
   const [slots, setSlots] = useState<Slot[]>([]);
   const [selectedSlotId, setSelectedSlotId] = useState<string | undefined>();
+<<<<<<< HEAD
   const [selectedText, setSelectedText] = useState('');
+=======
+>>>>>>> 2cd2bd140c362c9499975d59ee798fcb3d5e282a
 
   useEffect(() => {
     const fetchSlots = async () => {
@@ -73,11 +94,14 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
     callback(slot);
   };
 
+<<<<<<< HEAD
   const handleTextSelection = () => {
     const text = window.getSelection()?.toString() || '';
     setSelectedText(text);
   };
 
+=======
+>>>>>>> 2cd2bd140c362c9499975d59ee798fcb3d5e282a
   return (
     <div
       style={{
@@ -90,14 +114,20 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
         padding: 4,
         boxShadow: "dark-lg",
         zIndex: 9999,
+<<<<<<< HEAD
         fontSize: 'xs',
       }}
       {...divProps}
       onMouseUp={handleTextSelection} // Add this to capture text selection
+=======
+      }}
+      {...divProps}
+>>>>>>> 2cd2bd140c362c9499975d59ee798fcb3d5e282a
     >
       {loading ? (
         <Spinner color='red.500' />
       ) : (
+<<<<<<< HEAD
         <Stack direction="row" spacing={3}>
           {slots.length > 0 && (
             <>
@@ -112,6 +142,11 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
                   border="2px"
                 />
               </Tooltip>
+=======
+        <Stack direction="row" spacing={4}>
+          {slots.length > 0 && (
+            <>
+>>>>>>> 2cd2bd140c362c9499975d59ee798fcb3d5e282a
               <Tooltip label={slots[0]?.name} bg='gray.700' color='black'>
                 <IconButton
                   aria-label="button0"
@@ -182,6 +217,10 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
       )}
     </div>
   );
+<<<<<<< HEAD
 };
 
 export default GPTRequestButton;
+=======
+}
+>>>>>>> 2cd2bd140c362c9499975d59ee798fcb3d5e282a
