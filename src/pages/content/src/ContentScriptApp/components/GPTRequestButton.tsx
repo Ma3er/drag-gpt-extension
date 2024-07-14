@@ -1,48 +1,14 @@
-import { ComponentPropsWithRef, CSSProperties } from "react";
-import styled from "@emotion/styled";
-import { Spinner, Text, Tooltip } from "@chakra-ui/react";
-import { COLORS, Z_INDEX } from "@src/constant/style";
-import { ChatIcon } from "@chakra-ui/icons";
+import React, { CSSProperties, ComponentPropsWithRef, useEffect, useState } from "react";
+import { Tooltip, IconButton, Stack, Spinner } from "@chakra-ui/react";
+import { ChatIcon, AddIcon, EditIcon } from "@chakra-ui/icons";
+import { SlotStorage } from "@pages/background/lib/storage/slotStorage";
+import { MdSettings } from "react-icons/md";
 
-const GAP = 4;
-
-const StyledRequestButton = styled.button`
-  border: none;
-  padding: 0;
-  position: absolute;
-  z-index: ${Z_INDEX.ROOT};
-  width: 20px;
-  height: 20px;
-  background: ${COLORS.CONTENT_BACKGROUND};
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-
-  outline: none;
-  box-shadow: none;
-
-  &:hover {
-    border: 1px solid #ffffff;
-  }
-
-  &:active {
-    transform: scale(0.9);
-    transition: all ease-in-out 100ms;
-  }
-`;
-
-const labelTextInlineStyle: CSSProperties = {
-  display: "block",
-  fontSize: "13px",
-  lineHeight: 1,
-  margin: 0,
-  maxWidth: "160px",
-  overflow: "hidden",
-  whiteSpace: "nowrap",
-  textOverflow: "ellipsis",
-  fontFamily: "Noto Sans KR, sans-serif",
+type Slot = {
+  id: string;
+  name: string;
+  isSelected?: boolean;
+  type: "gpt4-turbo" | "gpt4o";
 };
 
 type GPTRequestButtonProps = {
@@ -58,32 +24,129 @@ export default function GPTRequestButton({
   loading,
   style,
   selectedSlot,
-  ...restProps
-}: GPTRequestButtonProps) {
+  ...divProps
+}) => {
+  const [slots, setSlots] = useState<Slot[]>([]);
+  const [selectedSlotId, setSelectedSlotId] = useState<string | undefined>();
+
+  useEffect(() => {
+    const fetchSlots = async () => {
+      const allSlots = await SlotStorage.getAllSlots();
+      setSlots(allSlots.slice(0, 4));
+    };
+
+    fetchSlots();
+  }, []);
+
+  const updateSelectedSlot = async (slotId: string) => {
+    console.log('🔄 Updating selected slot to:', slotId);
+    const slots = await SlotStorage.getAllSlots();
+    const updatedSlots = slots.map(slot => ({
+      ...slot,
+      isSelected: slot.id === slotId,
+    }));
+    await SlotStorage.setAllSlots(updatedSlots);
+    setSelectedSlotId(slotId);
+    console.log("✅ Updated slots:", updatedSlots);
+    console.log("🔵 New selectedSlotId:", slotId);
+  };
+
+  const handleSlotClick = async (slot: Slot, callback: (slot: Slot) => void) => {
+    if (slot.id !== selectedSlotId) {
+      await updateSelectedSlot(slot.id);
+    }
+    callback(slot);
+  };
+
   return (
-    <Tooltip
-      label={
-        selectedSlot?.name && (
-          <Text style={labelTextInlineStyle}>{selectedSlot.name}</Text>
-        )
-      }
+    <div
+      style={{
+        position: 'absolute',
+        top,
+        left,
+        background: "white",
+        borderRadius: "6px",
+        border: "2px solid teal",
+        padding: 4,
+        boxShadow: "dark-lg",
+        zIndex: 9999,
+      }}
+      {...divProps}
     >
-      <StyledRequestButton
-        aria-busy={loading}
-        disabled={loading}
-        style={{
-          ...style,
-          top: `${top + GAP}px`,
-          left: `${left + GAP}px`,
-        }}
-        {...restProps}
-      >
-        {loading ? (
-          <Spinner color="white" width="8px" height="px" />
-        ) : (
-          <ChatIcon aria-label="request" color="white" boxSize="12px" />
-        )}
-      </StyledRequestButton>
-    </Tooltip>
+      {loading ? (
+        <Spinner color='red.500' />
+      ) : (
+        <Stack direction="row" spacing={4}>
+          {slots.length > 0 && (
+            <>
+              <Tooltip label={slots[0]?.name} bg='gray.700' color='black'>
+                <IconButton
+                  aria-label="button0"
+                  icon={<ChatIcon />}
+                  size="xs"
+                  colorScheme={
+                    slots[0]?.id === selectedSlotId ? "orange" : "teal"
+                  }
+                  onClick={() => handleSlotClick(slots[0], onAddClick)}
+                  variant="outline"
+                  border="2px"
+                  backgroundColor={
+                    slots[0]?.id === selectedSlotId ? "orange" : "transparent"
+                  }
+                />
+              </Tooltip>
+              <Tooltip label={slots[1]?.name} bg='gray.700' color='black'>
+                <IconButton
+                  aria-label="button1"
+                  icon={<ChatIcon />}
+                  size="xs"
+                  colorScheme={
+                    slots[1]?.id === selectedSlotId ? "orange" : "teal"
+                  }
+                  onClick={() => handleSlotClick(slots[1], onAddClick)}
+                  variant="outline"
+                  border="2px"
+                  backgroundColor={
+                    slots[1]?.id === selectedSlotId ? "orange" : "transparent"
+                  }
+                />
+              </Tooltip>
+              <Tooltip label={slots[2]?.name} bg='gray.700' color='black'>
+                <IconButton
+                  aria-label="button2"
+                  icon={<ChatIcon />}
+                  size="xs"
+                  colorScheme={
+                    slots[2]?.id === selectedSlotId ? "orange" : "teal"
+                  }
+                  onClick={() => handleSlotClick(slots[2], onAddClick)}
+                  variant="outline"
+                  border="2px"
+                  backgroundColor={
+                    slots[2]?.id === selectedSlotId ? "orange" : "transparent"
+                  }
+                />
+              </Tooltip>
+              <Tooltip label={slots[3]?.name} bg='gray.700' color='black'>
+                <IconButton
+                  aria-label="button3"
+                  icon={<ChatIcon />}
+                  size="xs"
+                  colorScheme={
+                    slots[3]?.id === selectedSlotId ? "orange" : "teal"
+                  }
+                  onClick={() => handleSlotClick(slots[3], onAddClick)}
+                  variant="outline"
+                  border="2px"
+                  backgroundColor={
+                    slots[3]?.id === selectedSlotId ? "orange" : "transparent"
+                  }
+                />
+              </Tooltip>
+            </>
+          )}
+        </Stack>
+      )}
+    </div>
   );
 }
