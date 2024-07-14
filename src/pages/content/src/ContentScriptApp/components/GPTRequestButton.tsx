@@ -1,7 +1,8 @@
-import React, { CSSProperties, ComponentPropsWithRef, useEffect, useState } from 'react';
-import { Tooltip, IconButton, Stack, Spinner } from '@chakra-ui/react';
-import { ChatIcon, AddIcon, EditIcon } from '@chakra-ui/icons';
-import { SlotStorage } from '@pages/background/lib/storage/slotStorage';
+import React, { CSSProperties, ComponentPropsWithRef, useEffect, useState } from "react";
+import { Tooltip, IconButton, Stack, Spinner } from "@chakra-ui/react";
+import { ChatIcon, AddIcon, EditIcon } from "@chakra-ui/icons";
+import { SlotStorage } from "@pages/background/lib/storage/slotStorage";
+import { MdSettings } from "react-icons/md";
 
 type Slot = {
   id: string;
@@ -40,14 +41,14 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
   useEffect(() => {
     const fetchSlots = async () => {
       const allSlots = await SlotStorage.getAllSlots();
-      setSlots(allSlots.slice(0, 3));
+      setSlots(allSlots.slice(0, 4));
     };
 
     fetchSlots();
   }, []);
 
   const updateSelectedSlot = async (slotId: string) => {
-    console.log('👉 Updating selected slot to:', slotId);
+    console.log('🔄 Updating selected slot to:', slotId);
     const slots = await SlotStorage.getAllSlots();
     const updatedSlots = slots.map(slot => ({
       ...slot,
@@ -55,8 +56,8 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
     }));
     await SlotStorage.setAllSlots(updatedSlots);
     setSelectedSlotId(slotId);
-    console.log('✅ Updated slots:', updatedSlots);
-    console.log('🔵 New selectedSlotId:', slotId);
+    console.log("✅ Updated slots:", updatedSlots);
+    console.log("🔵 New selectedSlotId:", slotId);
   };
 
   const handleSlotClick = async (slot: Slot, callback: (slot: Slot) => void) => {
@@ -68,57 +69,87 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
 
   return (
     <div
-      style={{  // CSSProperties for background 
+      style={{
         position: 'absolute',
         top,
         left,
-        background: 'white',
-        borderRadius: '6px',
-        border: '2px solid teal',
+        background: "white",
+        borderRadius: "6px",
+        border: "2px solid teal",
         padding: 4,
+        boxShadow: "dark-lg",
+        zIndex: 9999,
       }}
       {...divProps}
     >
       {loading ? (
-        <Spinner color='green.500' />
+        <Spinner color='red.500' />
       ) : (
         <Stack direction="row" spacing={4}>
           {slots.length > 0 && (
             <>
-              <Tooltip label={slots[0]?.name}>
+              <Tooltip label={slots[0]?.name} bg='gray.700' color='black'>
                 <IconButton
-                  aria-label="request"
+                  aria-label="button0"
                   icon={<ChatIcon />}
                   size="xs"
-                  colorScheme={slots[0]?.id === selectedSlotId ? "orange" : "teal"}
-                  onClick={() => handleSlotClick(slots[0], onRequestClick)}
+                  colorScheme={
+                    slots[0]?.id === selectedSlotId ? "orange" : "teal"
+                  }
+                  onClick={() => handleSlotClick(slots[0], onAddClick)}
                   variant="outline"
                   border="2px"
-                  backgroundColor={slots[0]?.id === selectedSlotId ? "orange" : "transparent"}
+                  backgroundColor={
+                    slots[0]?.id === selectedSlotId ? "orange" : "transparent"
+                  }
                 />
               </Tooltip>
-              <Tooltip label={slots[1]?.name}>
+              <Tooltip label={slots[1]?.name} bg='gray.700' color='black'>
                 <IconButton
-                  aria-label="add"
-                  icon={<AddIcon />}
+                  aria-label="button1"
+                  icon={<ChatIcon />}
                   size="xs"
-                  colorScheme={slots[1]?.id === selectedSlotId ? "orange" : "teal"}
+                  colorScheme={
+                    slots[1]?.id === selectedSlotId ? "orange" : "teal"
+                  }
                   onClick={() => handleSlotClick(slots[1], onAddClick)}
                   variant="outline"
                   border="2px"
-                  backgroundColor={slots[1]?.id === selectedSlotId ? "orange" : "transparent"}
+                  backgroundColor={
+                    slots[1]?.id === selectedSlotId ? "orange" : "transparent"
+                  }
                 />
               </Tooltip>
-              <Tooltip label={slots[2]?.name}>
+              <Tooltip label={slots[2]?.name} bg='gray.700' color='black'>
                 <IconButton
-                  aria-label="edit"
-                  icon={<EditIcon />}
+                  aria-label="button2"
+                  icon={<ChatIcon />}
                   size="xs"
-                  colorScheme={slots[2]?.id === selectedSlotId ? "orange" : "teal"}
-                  onClick={() => handleSlotClick(slots[2], onEditClick)}
+                  colorScheme={
+                    slots[2]?.id === selectedSlotId ? "orange" : "teal"
+                  }
+                  onClick={() => handleSlotClick(slots[2], onAddClick)}
                   variant="outline"
                   border="2px"
-                  backgroundColor={slots[2]?.id === selectedSlotId ? "orange" : "transparent"}
+                  backgroundColor={
+                    slots[2]?.id === selectedSlotId ? "orange" : "transparent"
+                  }
+                />
+              </Tooltip>
+              <Tooltip label={slots[3]?.name} bg='gray.700' color='black'>
+                <IconButton
+                  aria-label="button3"
+                  icon={<ChatIcon />}
+                  size="xs"
+                  colorScheme={
+                    slots[3]?.id === selectedSlotId ? "orange" : "teal"
+                  }
+                  onClick={() => handleSlotClick(slots[3], onAddClick)}
+                  variant="outline"
+                  border="2px"
+                  backgroundColor={
+                    slots[3]?.id === selectedSlotId ? "orange" : "transparent"
+                  }
                 />
               </Tooltip>
             </>
@@ -127,6 +158,6 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
       )}
     </div>
   );
-}
+};
 
 export default GPTRequestButton;

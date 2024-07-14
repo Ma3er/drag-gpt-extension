@@ -30,6 +30,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-draggable": "4.4.5",
+    "react-icons": "^5.2.1",
     "regenerator-runtime": "0.13.11",
     "reload": "^3.2.1",
     "xstate": "4.37.0"
