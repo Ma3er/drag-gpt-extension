@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { IconButton, Spinner, Stack, Tooltip } from '@chakra-ui/react';
-import { CopyIcon, ChatIcon, ArrowRightIcon } from '@chakra-ui/icons';
+import React, { useEffect, useState } from "react";
+import { Tooltip, IconButton, Stack, Spinner } from "@chakra-ui/react";
+import { ChatIcon, CopyIcon, ArrowRightIcon } from "@chakra-ui/icons";
 import { SlotStorage } from "@pages/background/lib/storage/slotStorage";
 
 type Slot = {
@@ -45,48 +45,39 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
 
   useEffect(() => {
     const fetchSlots = async () => {
-      try {
-        const allSlots = await SlotStorage.getAllSlots();
-        console.log('Fetched slots:', allSlots);
-        setSlots(allSlots.slice(0, 5));
-      } catch (error) {
-        console.error('Error fetching slots:', error);
-      }
+      const allSlots = await SlotStorage.getAllSlots();
+      console.log('Fetched slots:', allSlots);
+      setSlots(allSlots.slice(0, 5));
     };
 
     fetchSlots();
   }, []);
 
   const updateSelectedSlot = async (slotId: string) => {
-    console.log('🔄 Updating selected slot to:', slotId);
-    try {
-      const slots = await SlotStorage.getAllSlots();
-      const updatedSlots = slots.map(slot => ({
-        ...slot,
-        isSelected: slot.id === slotId,
-      }));
-      setSlots(updatedSlots);
-      setSelectedSlotId(slotId);
-    } catch (error) {
-      console.error('Error updating selected slot:', error);
-    }
+    console.log('Updating selected slot to:', slotId);
+    const slots = await SlotStorage.getAllSlots();
+    const updatedSlots = slots.map(slot => ({
+      ...slot,
+      isSelected: slot.id === slotId,
+    }));
+    setSlots(updatedSlots);
+    setSelectedSlotId(slotId);
   };
 
   const handleSlotClick = async (slot: Slot, callback: (slot: Slot) => void) => {
-    console.log('🔘 Slot clicked:', slot);
     await updateSelectedSlot(slot.id);
     callback(slot);
   };
 
   const handleTextSelection = () => {
     const selectedText = window.getSelection()?.toString() || '';
-    setSelectedText(selectedText);
     console.log('📋 Selected text:', selectedText);
+    setSelectedText(selectedText);
   };
 
   const handleCopyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
-    console.log('📋 Text copied to clipboard:', text);
+    console.log('Text copied to clipboard:', text);
   };
 
   return (

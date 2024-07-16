@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { useDisclosure } from "@chakra-ui/hooks";
 import SideDrawer from './SideDrawer';
-import GPTRequestButton from "../../content/src/ContentScriptApp/components/GPTRequestButton";
+import GPTRequestButton from "../components/GPTRequestButton";
+
 
 const ParentComponent: React.FC = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -15,6 +15,10 @@ const ParentComponent: React.FC = () => {
     console.log('handleButtonClick function:', handleButtonClick);
   }, []);
 
+  useEffect(() => {
+    console.log('Rendering ParentComponent');
+  }, []);
+
   return (
     <div>
       <GPTRequestButton 
@@ -23,7 +27,7 @@ const ParentComponent: React.FC = () => {
         loading={false} 
         onChatClick={(slot) => { console.log(slot); }} 
         selectedSlot={null} 
-        onOpenDrawer={handleButtonClick} // Ensure this prop is correctly passed
+        onOpenDrawer={handleButtonClick} 
       />
       <SideDrawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} />
     </div>

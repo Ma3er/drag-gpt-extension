@@ -2,7 +2,6 @@ import React from "react";
 import { NoApiKeyPage } from "@pages/popup/pages/NoApiKeyPage";
 import SlotListPage from "@pages/popup/pages/SlotListPage";
 import { useMachine } from "@xstate/react";
-
 import popupStateMachine from "@pages/popup/xState/popupStateMachine";
 import {
   sendMessageToBackground,
@@ -10,7 +9,6 @@ import {
 } from "@src/chrome/message";
 import MainLayout from "@pages/popup/components/layout/MainLayout";
 import QuickChattingPage from "@pages/popup/pages/QuickChattingPage";
-import ParentComponent from "@pages/popup/drawer/ParentComponent";
 
 const saveApiKeyToBackground = async (apiKey: string) => {
   await sendMessageToBackgroundAsync({
@@ -53,13 +51,10 @@ export default function Popup() {
   return (
     <MainLayout>
       {state.matches("slot_list_page") && (
-        <>
-          <SlotListPage
-            onClickChangeApiKey={() => send("RESET_API_KEY")}
-            onClickQuickChatButton={() => send("GO_TO_QUICK_CHAT")}
-          />
-          <ParentComponent />
-        </>
+        <SlotListPage
+          onClickChangeApiKey={() => send("RESET_API_KEY")}
+          onClickQuickChatButton={() => send("GO_TO_QUICK_CHAT")}
+        />
       )}
       {state.hasTag("noApiKeyPage") && (
         <NoApiKeyPage
