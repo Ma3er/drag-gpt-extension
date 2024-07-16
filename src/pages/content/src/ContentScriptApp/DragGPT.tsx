@@ -1,33 +1,29 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import styled from "@emotion/styled";
+import { useMachine } from "@xstate/react";
 import GPTRequestButton from "@pages/content/src/ContentScriptApp/components/GPTRequestButton";
 import ResponseMessageBox from "@pages/content/src/ContentScriptApp/components/messageBox/ResponseMessageBox";
 import ErrorMessageBox from "@pages/content/src/ContentScriptApp/components/messageBox/ErrorMessageBox";
-import { useMachine } from "@xstate/react";
 import delayPromise from "@pages/content/src/ContentScriptApp/utils/delayPromise";
 import dragStateMachine from "@pages/content/src/ContentScriptApp/xState/dragStateMachine";
 import { sendMessageToBackground } from "@src/chrome/message";
-import styled from "@emotion/styled";
 import { getPositionOnScreen } from "@pages/content/src/ContentScriptApp/utils/getPositionOnScreen";
 import useSelectedSlot from "@pages/content/src/ContentScriptApp/hooks/useSelectedSlot";
 import ChatText from "@src/shared/component/ChatText";
 import AssistantChat from "@src/shared/component/AssistantChat";
 import MessageBox from "@pages/content/src/ContentScriptApp/components/messageBox/MessageBox";
 import { t } from "@src/chrome/i18n";
-
-// Correctly import changeSlot
 import changeSlot from "@src/pages/popup/xState/slotListPageStateMachine";
-
-// Ensure RequiredDataNullableInput is exported
 import { RequiredDataNullableInput } from "@src/pages/background/index";
 
-// Original Container styled component
+// Container styled component
 const Container = styled.div`
   * {
     font-family: "Noto Sans KR", sans-serif;
   }
 `;
 
-// Original Slot interface
+// Slot interface
 interface Slot {
   id: string;
   name: string;
@@ -35,16 +31,16 @@ interface Slot {
   // Add other properties as needed
 }
 
-// Original skipLoopCycleOnce function
+// skipLoopCycleOnce function
 const skipLoopCycleOnce = async () => await delayPromise(1);
 
-// Original getSelectionText function
+// getSelectionText function
 const getSelectionText = () => {
   const selection = window.getSelection();
   return selection ? selection.toString() : "";
 };
 
-// Original getSelectionNodeRect function
+// getSelectionNodeRect function
 const getSelectionNodeRect = () => {
   const selection = window.getSelection();
   if (selection && selection.rangeCount > 0) {
@@ -55,7 +51,7 @@ const getSelectionNodeRect = () => {
   return null;
 };
 
-// Original getGPTResponseAsStream function
+// getGPTResponseAsStream function
 async function getGPTResponseAsStream({
   input,
   onDelta,
@@ -83,7 +79,7 @@ async function getGPTResponseAsStream({
   });
 }
 
-// New DragGPT component
+// DragGPT component
 function DragGPT() {
   const { selectedSlot, updateSelectedSlot } = useSelectedSlot();
   const [state, send] = useMachine(dragStateMachine, {
@@ -108,7 +104,6 @@ function DragGPT() {
     },
     devTools: true,
   });
-
   const [requestPending, setRequestPending] = useState(false);
 
   useEffect(() => {
@@ -134,8 +129,6 @@ function DragGPT() {
 
   useEffect(() => {
     if (requestPending && selectedSlot) {
-      console.log("↗️Request GPT initiated");
-      console.log("↗️❌requestGPT Current state before request:❌", state, selectedSlot);
       send("REQUEST");
       console.log("↗️✖️Current state after request: ✖️", state, selectedSlot);
       setRequestPending(false);
@@ -146,36 +139,12 @@ function DragGPT() {
     send("CLOSE_MESSAGE_BOX");
   };
 
-  const handleRequestClick = async (slot: Slot) => {
-    console.log("↗️Chat 1 🟨 default 🟨Clicked:", slot);
-    console.log("↗️Current selectedSlot:", selectedSlot);
-    await updateSelectedSlot(slot.id);
-    setRequestPending(true);
-  };
-
-  const handleAddClick = async (slot: Slot) => {
+  const handleChatClick = async (slot: Slot) => {
     console.log("↗️Chat 2 🟩 twitter 🟩 Clicked:", slot);
-    console.log("↗️Current selectedSlot:", selectedSlot);
     await updateSelectedSlot(slot.id);
     setRequestPending(true);
   };
 
-  const handleEditClick = async (slot: Slot) => {
-    console.log("↗️Chat 3 🟥 x.com 🟥Clicked:", slot);
-    console.log("↗️Current selectedSlot:", selectedSlot);
-    await updateSelectedSlot(slot.id);
-    setRequestPending(true);
-  };
-
-  const defaultSelectSlot = (slot: Slot) => {
-    console.log("↗️Default selectSlot function called with slot:", slot);
-    console.log("↗️Current ⭐selectedSlot ⭐:", selectedSlot);
-  };
-
-  const handleUpdatedSlots = (slot: Slot) => {
-    console.log("↗️Updated Slots ♻️:", slot);
-    console.log("↗️Current selectedSlot🟢:", selectedSlot);
-  };
 
   return (
     <Container>
@@ -184,11 +153,7 @@ function DragGPT() {
           top={state.context.requestButtonPosition.top}
           left={state.context.requestButtonPosition.left}
           loading={state.matches("loading")}
-          onRequestClick={handleRequestClick}
-          onAddClick={handleAddClick}
-          onEditClick={handleEditClick}
-          updatedSlots={handleUpdatedSlots}
-          selectSlot={selectedSlot ? () => selectedSlot : defaultSelectSlot}
+          onChatClick={handleChatClick}
           selectedSlot={selectedSlot}
         />
       )}

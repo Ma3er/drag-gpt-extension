@@ -20,11 +20,7 @@ type GPTRequestButtonProps = {
   top: number;
   left: number;
   loading: boolean;
-  onRequestClick: (slot: Slot) => void;
-  onAddClick: (slot: Slot) => void;
-  onEditClick: (slot: Slot) => void;
-  updatedSlots: (slot: Slot) => void;
-  selectSlot: (slot: Slot) => void;
+  onChatClick: (slot: Slot) => void;
   selectedSlot: Slot | null;
 } & ComponentPropsWithRef<"div">;
 
@@ -32,11 +28,7 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
   top,
   left,
   loading,
-  onRequestClick,
-  onAddClick,
-  onEditClick,
-  updatedSlots,
-  selectSlot,
+  onChatClick,
   selectedSlot,
   ...divProps
 }) => {
@@ -47,7 +39,7 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
   useEffect(() => {
     const fetchSlots = async () => {
       const allSlots = await SlotStorage.getAllSlots();
-      setSlots(allSlots.slice(0, 4));
+      setSlots(allSlots.slice(0, 5));
     };
 
     fetchSlots();
@@ -93,7 +85,7 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
         fontSize: 'xs',
       }}
       {...divProps}
-      onMouseUp={handleTextSelection} // Add this to capture text selection
+      onMouseUp={handleTextSelection}
     >
       {loading ? (
         <Spinner color='red.500' />
@@ -101,7 +93,7 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
         <Stack direction="row" spacing={3}>
           {slots.length > 0 && (
             <>
-              <Tooltip label="Clipboard" fontSize='xs' bg='gray.700' color='black' >
+              <Tooltip label="Clipboard" fontSize='xs' bg='gray.700' color='black'>
                 <IconButton
                   aria-label="Copy to Clipboard"
                   icon={<CopyIcon />}
@@ -112,70 +104,20 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
                   border="2px"
                 />
               </Tooltip>
-              <Tooltip label={slots[0]?.name} bg='gray.700' color='black'>
-                <IconButton
-                  aria-label="button0"
-                  icon={<ChatIcon />}
-                  size="xs"
-                  colorScheme={
-                    slots[0]?.id === selectedSlotId ? "orange" : "teal"
-                  }
-                  onClick={() => handleSlotClick(slots[0], onAddClick)}
-                  variant="outline"
-                  border="2px"
-                  backgroundColor={
-                    slots[0]?.id === selectedSlotId ? "orange" : "transparent"
-                  }
-                />
-              </Tooltip>
-              <Tooltip label={slots[1]?.name} bg='gray.700' color='black'>
-                <IconButton
-                  aria-label="button1"
-                  icon={<ChatIcon />}
-                  size="xs"
-                  colorScheme={
-                    slots[1]?.id === selectedSlotId ? "orange" : "teal"
-                  }
-                  onClick={() => handleSlotClick(slots[1], onAddClick)}
-                  variant="outline"
-                  border="2px"
-                  backgroundColor={
-                    slots[1]?.id === selectedSlotId ? "orange" : "transparent"
-                  }
-                />
-              </Tooltip>
-              <Tooltip label={slots[2]?.name} bg='gray.700' color='black'>
-                <IconButton
-                  aria-label="button2"
-                  icon={<ChatIcon />}
-                  size="xs"
-                  colorScheme={
-                    slots[2]?.id === selectedSlotId ? "orange" : "teal"
-                  }
-                  onClick={() => handleSlotClick(slots[2], onAddClick)}
-                  variant="outline"
-                  border="2px"
-                  backgroundColor={
-                    slots[2]?.id === selectedSlotId ? "orange" : "transparent"
-                  }
-                />
-              </Tooltip>
-              <Tooltip label={slots[3]?.name} bg='gray.700' color='black'>
-                <IconButton
-                  aria-label="button3"
-                  icon={<ChatIcon />}
-                  size="xs"
-                  colorScheme={
-                    slots[3]?.id === selectedSlotId ? "orange" : "teal"
-                  }
-                  onClick={() => handleSlotClick(slots[3], onAddClick)}
-                  variant="outline"
-                  border="2px"
-                  backgroundColor={
-                    slots[3]?.id === selectedSlotId ? "orange" : "transparent"
-                  }
-                />
-              </Tooltip>
+              {slots.map((slot, index) => (
+                <Tooltip key={slot.id} label={slot.name} bg='gray.700' color='black'>
+                  <IconButton
+                    aria-label={`button${index}`}
+                    icon={<ChatIcon />}
+                    size="xs"
+                    colorScheme={slot.id === selectedSlotId ? "orange" : "teal"}
+                    onClick={() => handleSlotClick(slot, onChatClick)}
+                    variant="outline"
+                    border="2px"
+                    backgroundColor={slot.id === selectedSlotId ? "orange" : "transparent"}
+                  />
+                </Tooltip>
+              ))}
             </>
           )}
         </Stack>
