@@ -1,12 +1,7 @@
-import React, { CSSProperties, ComponentPropsWithRef, useEffect, useState } from "react";
-import styled from "@emotion/styled";
-import { COLORS, Z_INDEX } from "@src/constant/style";
-import { Tooltip, IconButton, Stack, Spinner } from "@chakra-ui/react";
-import { ChatIcon, CopyIcon, ArrowRightIcon } from "@chakra-ui/icons";
+import React, { useState, useEffect } from 'react';
+import { IconButton, Spinner, Stack, Tooltip } from '@chakra-ui/react';
+import { CopyIcon, ChatIcon, ArrowRightIcon } from '@chakra-ui/icons';
 import { SlotStorage } from "@pages/background/lib/storage/slotStorage";
-import ParentComponent from "@pages/popup/drawer/ParentComponent";
-import ReactDOM from 'react-dom';
-
 
 type Slot = {
   id: string;
@@ -37,16 +32,26 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
   const [selectedSlotId, setSelectedSlotId] = useState<string | undefined>();
   const [selectedText, setSelectedText] = useState('');
 
-  console.log(' 🦺 GPTRequestButton -> onOpenDrawer', onOpenDrawer);
+  console.log('GPTRequestButton received onOpenDrawer prop:', onOpenDrawer);
 
   const handleClick = () => {
-    console.log(' 🦺 GPTRequestButton -> handleClick called');
-    onOpenDrawer();
+    console.log('handleClick called');
+    if (typeof onOpenDrawer === 'function') {
+      onOpenDrawer();
+    } else {
+      console.error('onOpenDrawer is not a function:', onOpenDrawer);
+    }
   };
+
   useEffect(() => {
     const fetchSlots = async () => {
-      const allSlots = await SlotStorage.getAllSlots();
-      setSlots(allSlots.slice(0, 5));
+      try {
+        const allSlots = await SlotStorage.getAllSlots();
+        console.log('Fetched slots:', allSlots);
+        setSlots(allSlots.slice(0, 5));
+      } catch (error) {
+        console.error('Error fetching slots:', error);
+      }
     };
 
     fetchSlots();
@@ -54,16 +59,21 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
 
   const updateSelectedSlot = async (slotId: string) => {
     console.log('🔄 Updating selected slot to:', slotId);
-    const slots = await SlotStorage.getAllSlots();
-    const updatedSlots = slots.map(slot => ({
-      ...slot,
-      isSelected: slot.id === slotId,
-    }));
-    setSlots(updatedSlots);
-    setSelectedSlotId(slotId);
+    try {
+      const slots = await SlotStorage.getAllSlots();
+      const updatedSlots = slots.map(slot => ({
+        ...slot,
+        isSelected: slot.id === slotId,
+      }));
+      setSlots(updatedSlots);
+      setSelectedSlotId(slotId);
+    } catch (error) {
+      console.error('Error updating selected slot:', error);
+    }
   };
 
   const handleSlotClick = async (slot: Slot, callback: (slot: Slot) => void) => {
+    console.log('🔘 Slot clicked:', slot);
     await updateSelectedSlot(slot.id);
     callback(slot);
   };
@@ -71,6 +81,7 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
   const handleTextSelection = () => {
     const selectedText = window.getSelection()?.toString() || '';
     setSelectedText(selectedText);
+    console.log('📋 Selected text:', selectedText);
   };
 
   const handleCopyToClipboard = (text: string) => {
@@ -131,7 +142,7 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
                 colorScheme="blue"
                 icon={<ArrowRightIcon />}
                 aria-label="Open Drawer"
-                onClick={onOpenDrawer}
+                onClick={handleClick}
               />
             </>
           )}

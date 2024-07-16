@@ -1,29 +1,31 @@
-import React from 'react';
-import { useDisclosure } from '@chakra-ui/hooks';
-import SideDrawer from '@pages/popup/drawer/sideDrawer';
-import GPTRequestButton from "src/pages/content/src/ContentScriptApp/components/GPTRequestButton";
+import React, { useState, useEffect } from "react";
+import { useDisclosure } from "@chakra-ui/hooks";
+import SideDrawer from './SideDrawer';
+import GPTRequestButton from "../../content/src/ContentScriptApp/components/GPTRequestButton";
 
-const ParentComponent = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+const ParentComponent: React.FC = () => {
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
-  const handleOpenDrawer = () => {
-    console.log('Drawer opened');
-    console.log('🦺 ParentComponent -> isOpen', isOpen);
-    console.log('🦺 ParentComponent -> onOpen', onOpen);
-    onOpen();
+  const handleButtonClick = () => {
+    console.log('Button clicked, opening drawer');
+    setIsDrawerOpen(true);
   };
+
+  useEffect(() => {
+    console.log('handleButtonClick function:', handleButtonClick);
+  }, []);
 
   return (
     <div>
-      <GPTRequestButton
-        top={100}
-        left={100}
-        loading={false}
-        onChatClick={(slot) => console.log('Chat clicked', slot)}
-        onOpenDrawer={handleOpenDrawer}
-        selectedSlot={null}
+      <GPTRequestButton 
+        top={0} 
+        left={0} 
+        loading={false} 
+        onChatClick={(slot) => { console.log(slot); }} 
+        selectedSlot={null} 
+        onOpenDrawer={handleButtonClick} // Ensure this prop is correctly passed
       />
-      <SideDrawer isOpen={isOpen} onClose={onClose} />
+      <SideDrawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} />
     </div>
   );
 };
