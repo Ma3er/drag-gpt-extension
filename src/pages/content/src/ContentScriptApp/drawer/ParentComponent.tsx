@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
-import SideDrawer from './SideDrawer';
-import GPTRequestButton from "../components/GPTRequestButton";
-
+import React, { useState, useEffect } from 'react';
+import GPTRequestButton from '../components/GPTRequestButton'; // Ensure this path is correct
+import SideDrawer from './SideDrawer'; // Ensure this path is correct
 
 const ParentComponent: React.FC = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -13,7 +12,7 @@ const ParentComponent: React.FC = () => {
 
   useEffect(() => {
     console.log('handleButtonClick function:', handleButtonClick);
-  }, []);
+  }, [handleButtonClick]);
 
   useEffect(() => {
     console.log('Rendering ParentComponent');
@@ -27,7 +26,7 @@ const ParentComponent: React.FC = () => {
         loading={false} 
         onChatClick={(slot) => { console.log(slot); }} 
         selectedSlot={null} 
-        onOpenDrawer={handleButtonClick} 
+        onOpenDrawer={handleButtonClick} // Directly pass the function
       />
       <SideDrawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} />
     </div>

@@ -32,7 +32,9 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
   const [selectedSlotId, setSelectedSlotId] = useState<string | undefined>();
   const [selectedText, setSelectedText] = useState('');
 
-  console.log('GPTRequestButton received onOpenDrawer prop:', onOpenDrawer);
+  useEffect(() => {
+    console.log('GPTRequestButton received onOpenDrawer prop:', onOpenDrawer);
+  }, [onOpenDrawer]);
 
   const handleClick = () => {
     console.log('handleClick called');

@@ -1,29 +1,49 @@
-import React from 'react';
-import { Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton, DrawerHeader, DrawerBody, DrawerFooter } from '@chakra-ui/react';
-
-interface SideDrawerProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
-
-const SideDrawer: React.FC<SideDrawerProps> = ({ isOpen, onClose }) => {
-  return (
-    <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
-      <DrawerOverlay />
-      <DrawerContent>
-        <DrawerCloseButton />
-        <DrawerHeader>Drawer Header</DrawerHeader>
-        <DrawerBody>
-          {/* Add your content here */}
-          Content goes here...
-        </DrawerBody>
-        <DrawerFooter>
-          {/* Add footer content here */}
-          Footer content...
-        </DrawerFooter>
-      </DrawerContent>
-    </Drawer>
-  );
-};
-
-export default SideDrawer;
+import {
+    Drawer,
+    DrawerBody,
+    DrawerFooter,
+    DrawerHeader,
+    DrawerOverlay,
+    DrawerContent,
+    DrawerCloseButton,
+  } from '@chakra-ui/react';
+  import { Button } from '@chakra-ui/button';
+  import { Input } from '@chakra-ui/input';
+  import React from 'react';
+  
+  interface DrawerPopupProps {
+    isOpen: boolean;
+    onClose: () => void;
+  }
+  
+  const SideDrawer: React.FC<DrawerPopupProps> = ({ isOpen, onClose }) => {
+    const btnRef = React.useRef<HTMLButtonElement | null>(null);
+  
+    return (
+      <Drawer
+        isOpen={isOpen}
+        placement='right'
+        onClose={onClose}
+        finalFocusRef={btnRef}
+      >
+        <DrawerOverlay />
+        <DrawerContent>
+          <DrawerCloseButton />
+          <DrawerHeader>Create your account</DrawerHeader>
+  
+          <DrawerBody>
+            <Input placeholder='Type here...' />
+          </DrawerBody>
+  
+          <DrawerFooter>
+            <Button variant='outline' mr={3} onClick={onClose}>
+              Cancel
+            </Button>
+            <Button colorScheme='blue'>Save</Button>
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
+    );
+  };
+  
+  export default SideDrawer;

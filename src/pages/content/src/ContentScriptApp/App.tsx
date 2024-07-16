@@ -1,3 +1,4 @@
+import React from 'react';
 import DragGPT from "@pages/content/src/ContentScriptApp/DragGPT";
 import EmotionCacheProvider from "@pages/content/src/ContentScriptApp/emotion/EmotionCacheProvider";
 import ResetStyleProvider from "@pages/content/src/ContentScriptApp/emotion/ResetStyleProvider";
@@ -8,13 +9,13 @@ import ParentComponent from "./drawer/ParentComponent"; // Adjust the path as ne
 export default function App() {
   return (
     <ResetStyleProvider>
-      <ParentComponent />
       <FontProvider>
         <EmotionCacheProvider>
           <ThemeProvider theme={theme}>
             <CSSReset />
+            <ParentComponent />
             <DragGPT />
-          </ThemeProvider>  
+          </ThemeProvider>
         </EmotionCacheProvider>
       </FontProvider>
     </ResetStyleProvider>
