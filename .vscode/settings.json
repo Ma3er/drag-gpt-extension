@@ -1,3 +1,4 @@
 {
-    "keyboard.touchbar.enabled": true
+    "keyboard.touchbar.enabled": true,
+    "CodeGPT.apiKey": "OpenAI"
 }

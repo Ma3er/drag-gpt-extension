@@ -2,12 +2,11 @@ import React, { CSSProperties, ComponentPropsWithRef, useEffect, useState } from
 import styled from "@emotion/styled";
 import { COLORS, Z_INDEX } from "@src/constant/style";
 import { Tooltip, IconButton, Stack, Spinner } from "@chakra-ui/react";
-import { ChatIcon, CopyIcon } from "@chakra-ui/icons";
+import { ChatIcon, CopyIcon, ArrowRightIcon } from "@chakra-ui/icons";
 import { SlotStorage } from "@pages/background/lib/storage/slotStorage";
+import ParentComponent from "@pages/popup/drawer/ParentComponent";
+import ReactDOM from 'react-dom';
 
-const handleCopyToClipboard = (text: string) => {
-  navigator.clipboard.writeText(text);
-};
 
 type Slot = {
   id: string;
@@ -21,8 +20,9 @@ type GPTRequestButtonProps = {
   left: number;
   loading: boolean;
   onChatClick: (slot: Slot) => void;
+  onOpenDrawer: () => void;
   selectedSlot: Slot | null;
-} & ComponentPropsWithRef<"div">;
+} & React.ComponentPropsWithRef<"div">;
 
 const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
   top,
@@ -30,12 +30,19 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
   loading,
   onChatClick,
   selectedSlot,
+  onOpenDrawer,
   ...divProps
 }) => {
   const [slots, setSlots] = useState<Slot[]>([]);
   const [selectedSlotId, setSelectedSlotId] = useState<string | undefined>();
   const [selectedText, setSelectedText] = useState('');
 
+  console.log(' 🦺 GPTRequestButton -> onOpenDrawer', onOpenDrawer);
+
+  const handleClick = () => {
+    console.log(' 🦺 GPTRequestButton -> handleClick called');
+    onOpenDrawer();
+  };
   useEffect(() => {
     const fetchSlots = async () => {
       const allSlots = await SlotStorage.getAllSlots();
@@ -52,22 +59,23 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
       ...slot,
       isSelected: slot.id === slotId,
     }));
-    await SlotStorage.setAllSlots(updatedSlots);
+    setSlots(updatedSlots);
     setSelectedSlotId(slotId);
-    console.log("✅ Updated slots:", updatedSlots);
-    console.log("🔵 New selectedSlotId:", slotId);
   };
 
   const handleSlotClick = async (slot: Slot, callback: (slot: Slot) => void) => {
-    if (slot.id !== selectedSlotId) {
-      await updateSelectedSlot(slot.id);
-    }
+    await updateSelectedSlot(slot.id);
     callback(slot);
   };
 
   const handleTextSelection = () => {
-    const text = window.getSelection()?.toString() || '';
-    setSelectedText(text);
+    const selectedText = window.getSelection()?.toString() || '';
+    setSelectedText(selectedText);
+  };
+
+  const handleCopyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text);
+    console.log('📋 Text copied to clipboard:', text);
   };
 
   return (
@@ -118,6 +126,13 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
                   />
                 </Tooltip>
               ))}
+              <IconButton
+                size="xs"
+                colorScheme="blue"
+                icon={<ArrowRightIcon />}
+                aria-label="Open Drawer"
+                onClick={onOpenDrawer}
+              />
             </>
           )}
         </Stack>
