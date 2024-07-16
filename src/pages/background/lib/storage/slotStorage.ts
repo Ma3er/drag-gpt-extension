@@ -1,9 +1,47 @@
 import { SlotsManipulatorService } from "@pages/background/lib/service/slotsManipulatorService";
-import { ILocalStorage, LocalStorage } from "@src/chrome/localStorage";
+import { ILocalStorage } from "@src/chrome/localStorage";
+
+class ChromeSyncStorage implements ILocalStorage {
+  async load(key: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      chrome.storage.sync.get([key], (result) => {
+        if (chrome.runtime.lastError) {
+          reject(chrome.runtime.lastError);
+        } else {
+          resolve(result[key]);
+        }
+      });
+    });
+  }
+
+  async save(key: string, data: any): Promise<void> {
+    return new Promise((resolve, reject) => {
+      chrome.storage.sync.set({ [key]: data }, () => {
+        if (chrome.runtime.lastError) {
+          reject(chrome.runtime.lastError);
+        } else {
+          resolve();
+        }
+      });
+    });
+  }
+
+  async resetAll(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      chrome.storage.sync.clear(() => {
+        if (chrome.runtime.lastError) {
+          reject(chrome.runtime.lastError);
+        } else {
+          resolve();
+        }
+      });
+    });
+  }
+}
 
 export class SlotStorage {
   private static SLOTS = "SLOTS";
-  static storage: ILocalStorage = new LocalStorage();
+  static storage: ILocalStorage = new ChromeSyncStorage();
 
   static async getAllSlots(): Promise<Slot[]> {
     try {

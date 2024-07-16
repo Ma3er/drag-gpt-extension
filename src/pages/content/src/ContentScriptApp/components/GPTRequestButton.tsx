@@ -2,7 +2,7 @@ import React, { CSSProperties, ComponentPropsWithRef, useEffect, useState } from
 import styled from "@emotion/styled";
 import { COLORS, Z_INDEX } from "@src/constant/style";
 import { Tooltip, IconButton, Stack, Spinner } from "@chakra-ui/react";
-import { ChatIcon, AddIcon, EditIcon, CopyIcon } from "@chakra-ui/icons";
+import { ChatIcon, CopyIcon } from "@chakra-ui/icons";
 import { SlotStorage } from "@pages/background/lib/storage/slotStorage";
 
 const handleCopyToClipboard = (text: string) => {
