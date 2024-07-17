@@ -15,6 +15,8 @@ import MessageBox from "@pages/content/src/ContentScriptApp/components/messageBo
 import { t } from "@src/chrome/i18n";
 import changeSlot from "@src/pages/popup/xState/slotListPageStateMachine";
 import { RequiredDataNullableInput } from "@src/pages/background/index";
+import SideDrawer from "@pages/content/src/ContentScriptApp/drawer/SideDrawer";
+
 
 // Container styled component
 const Container = styled.div`
@@ -108,7 +110,7 @@ function DragGPT() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const handleButtonClick = () => {
-    console.log('Button clicked, opening drawer');
+    console.log("Button clicked, opening drawer");
     setIsDrawerOpen(true);
   };
 
@@ -151,10 +153,6 @@ function DragGPT() {
     setRequestPending(true);
   };
 
-  function onOpenDrawer() {
-    throw new Error("Function not implemented.");
-  }
-
   return (
     <Container>
       {state.hasTag("showRequestButton") && (
@@ -164,7 +162,7 @@ function DragGPT() {
           loading={state.matches("loading")}
           onChatClick={handleChatClick}
           selectedSlot={selectedSlot}
-          onOpenDrawer={onOpenDrawer}
+          onOpenDrawer={handleButtonClick}
         />
       )}
       <SideDrawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} />

@@ -1,51 +1,38 @@
 // SideDrawer.tsx
-import React, { useRef } from 'react';
-import {
-    Drawer,
-    DrawerBody,
-    DrawerFooter,
-    DrawerHeader,
-    DrawerOverlay,
-    DrawerContent,
-    DrawerCloseButton,
-  } from '@chakra-ui/react';
-  import { Button } from '@chakra-ui/button';
-  import { Input } from '@chakra-ui/input';
-  import React from 'react';
-  
-  interface DrawerPopupProps {
-    isOpen: boolean;
-    onClose: () => void;
-  }
-  
-  const SideDrawer: React.FC<DrawerPopupProps> = ({ isOpen, onClose }) => {
-    const btnRef = React.useRef<HTMLButtonElement | null>(null);
-  
-    return (
-      <Drawer
-        isOpen={isOpen}
-        placement='right'
-        onClose={onClose}
-        finalFocusRef={btnRef}
-      >
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
-          <DrawerHeader>Create your account</DrawerHeader>
-  
-          <DrawerBody>
-            <Input placeholder='Type here...' />
-          </DrawerBody>
-  
-          <DrawerFooter>
-            <Button variant='outline' mr={3} onClick={onClose}>
-              Cancel
-            </Button>
-            <Button colorScheme='blue'>Save</Button>
-          </DrawerFooter>
-        </DrawerContent>
-      </Drawer>
-    );
-  };
-  
-  export default SideDrawer;
+import React from "react";
+import { Box, VStack, Text, CloseButton } from "@chakra-ui/react";
+
+interface PermanentDrawerProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+const PermanentDrawer: React.FC<PermanentDrawerProps> = ({
+  isOpen,
+  onClose,
+}) => {
+  return (
+    <Box
+      position="fixed"
+      right={isOpen ? "0" : "-350px"} // Adjust left property for transition
+      top={0}
+      bottom={0}
+      width="250px"
+      zIndex={9999}
+      bg="gray.900"
+      color="white"
+      transition="right 0.3s" // Add transition for smooth opening/closing
+      aria-hidden={!isOpen} // Accessibility improvement
+    >
+      <VStack spacing={4} align="stretch" p={4}>
+        <CloseButton onClick={onClose} alignSelf="flex-end" />
+        <Text fontSize="xl" fontWeight="bold">
+          Permanent Drawer
+        </Text>
+        {/* Add your drawer content here */}
+      </VStack>
+    </Box>
+  );
+};
+
+export default PermanentDrawer;
