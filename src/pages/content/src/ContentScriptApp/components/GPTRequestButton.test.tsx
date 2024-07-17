@@ -14,11 +14,8 @@ test('renders GPTRequestButton', () => {
       top={0}
       left={0}
       loading={false}
-      onRequestClick={() => { }}
-      onAddClick={() => { }}
-      onEditClick={() => { }}
-      updatedSlots={() => { }}
-      selectSlot={() => { }}
+      onChatClick={() => { }}
+      onOpenDrawer={() => { }}
       selectedSlot={mockSlot}
     />
   );
@@ -30,11 +27,8 @@ test('renders GPTRequestButton with loading', () => {
       top={0}
       left={0}
       loading={true}
-      onRequestClick={() => { }}
-      onAddClick={() => { }}
-      onEditClick={() => { }}
-      updatedSlots={() => { }}
-      selectSlot={() => { }}
+      onChatClick={() => { }}
+      onOpenDrawer={() => { }}
       selectedSlot={mockSlot}
     />
   );
