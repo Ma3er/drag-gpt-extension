@@ -91,6 +91,7 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
         position: "absolute",
         top,
         left,
+        transform: 'translateY(-100%)',
         background: "white",
         borderRadius: "6px",
         border: "2px solid teal",

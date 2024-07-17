@@ -1,11 +1,12 @@
+// StyleProvider.tsx
 import { ReactNode } from "react";
 import {
   ColorModeProvider,
   CSSReset,
   GlobalStyle,
-  theme,
   ThemeProvider,
 } from "@chakra-ui/react";
+import customTheme from "../../../src/pages/content/src/ContentScriptApp/drawer/customTheme" // Import the custom theme
 
 export default function StyleProvider({
   children,
@@ -24,7 +25,7 @@ export default function StyleProvider({
         },
       }}
     >
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={customTheme}> {/* Use the custom theme */}
         <CSSReset />
         <GlobalStyle />
         {children}

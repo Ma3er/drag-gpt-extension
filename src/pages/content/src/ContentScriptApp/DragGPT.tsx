@@ -15,8 +15,7 @@ import MessageBox from "@pages/content/src/ContentScriptApp/components/messageBo
 import { t } from "@src/chrome/i18n";
 import changeSlot from "@src/pages/popup/xState/slotListPageStateMachine";
 import { RequiredDataNullableInput } from "@src/pages/background/index";
-import { on } from "events";
-import SideDrawer from "./drawer/SideDrawer";
+
 // Container styled component
 const Container = styled.div`
   * {
@@ -106,6 +105,12 @@ function DragGPT() {
     devTools: true,
   });
   const [requestPending, setRequestPending] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+  const handleButtonClick = () => {
+    console.log('Button clicked, opening drawer');
+    setIsDrawerOpen(true);
+  };
 
   useEffect(() => {
     const onMouseUp = async (event: MouseEvent) => {
@@ -162,6 +167,7 @@ function DragGPT() {
           onOpenDrawer={onOpenDrawer}
         />
       )}
+      <SideDrawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} />
       {state.matches("temp_response_message_box") && (
         <MessageBox
           header={t("responseMessageBox_responseTitle")}
