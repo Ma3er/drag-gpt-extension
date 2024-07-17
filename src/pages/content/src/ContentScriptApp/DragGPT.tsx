@@ -15,7 +15,8 @@ import MessageBox from "@pages/content/src/ContentScriptApp/components/messageBo
 import { t } from "@src/chrome/i18n";
 import changeSlot from "@src/pages/popup/xState/slotListPageStateMachine";
 import { RequiredDataNullableInput } from "@src/pages/background/index";
-
+import { on } from "events";
+import SideDrawer from "./drawer/SideDrawer";
 // Container styled component
 const Container = styled.div`
   * {
@@ -145,6 +146,9 @@ function DragGPT() {
     setRequestPending(true);
   };
 
+  function onOpenDrawer() {
+    throw new Error("Function not implemented.");
+  }
 
   return (
     <Container>
@@ -155,6 +159,7 @@ function DragGPT() {
           loading={state.matches("loading")}
           onChatClick={handleChatClick}
           selectedSlot={selectedSlot}
+          onOpenDrawer={onOpenDrawer}
         />
       )}
       {state.matches("temp_response_message_box") && (

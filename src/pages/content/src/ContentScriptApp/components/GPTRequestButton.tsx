@@ -30,25 +30,25 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
 }) => {
   const [slots, setSlots] = useState<Slot[]>([]);
   const [selectedSlotId, setSelectedSlotId] = useState<string | undefined>();
-  const [selectedText, setSelectedText] = useState('');
-
+  const [selectedText, setSelectedText] = useState("");
+  // Log the onOpen  Drawer prop-------------------------------------------------
   useEffect(() => {
-    console.log('GPTRequestButton received onOpenDrawer prop:', onOpenDrawer);
+    console.log("GPTRequestButton received onOpenDrawer prop:", onOpenDrawer);
   }, [onOpenDrawer]);
-
-  const handleClick = () => {
-    console.log('handleClick called');
-    if (typeof onOpenDrawer === 'function') {
+  
+  // Handel Drawer Click =======================================================
+  const handleDrawerClick = () => {
+    console.log("handleClick called");
+    if (typeof onOpenDrawer === "function") {
       onOpenDrawer();
     } else {
-      console.error('onOpenDrawer is not a function:', onOpenDrawer);
+      console.error("onOpenDrawer is not a function:", onOpenDrawer);
     }
   };
-
   useEffect(() => {
     const fetchSlots = async () => {
       const allSlots = await SlotStorage.getAllSlots();
-      console.log('Fetched slots:', allSlots);
+      console.log("Fetched slots:", allSlots);
       setSlots(allSlots.slice(0, 5));
     };
 
@@ -56,9 +56,9 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
   }, []);
 
   const updateSelectedSlot = async (slotId: string) => {
-    console.log('Updating selected slot to:', slotId);
+    console.log("Updating selected slot to:", slotId);
     const slots = await SlotStorage.getAllSlots();
-    const updatedSlots = slots.map(slot => ({
+    const updatedSlots = slots.map((slot) => ({
       ...slot,
       isSelected: slot.id === slotId,
     }));
@@ -66,26 +66,29 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
     setSelectedSlotId(slotId);
   };
 
-  const handleSlotClick = async (slot: Slot, callback: (slot: Slot) => void) => {
+  const handleSlotClick = async (
+    slot: Slot,
+    callback: (slot: Slot) => void
+  ) => {
     await updateSelectedSlot(slot.id);
     callback(slot);
   };
 
   const handleTextSelection = () => {
-    const selectedText = window.getSelection()?.toString() || '';
-    console.log('📋 Selected text:', selectedText);
+    const selectedText = window.getSelection()?.toString() || "";
+    console.log("📋 Selected text:", selectedText);
     setSelectedText(selectedText);
   };
 
   const handleCopyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
-    console.log('Text copied to clipboard:', text);
+    console.log("Text copied to clipboard:", text);
   };
 
   return (
     <div
       style={{
-        position: 'absolute',
+        position: "absolute",
         top,
         left,
         background: "white",
@@ -94,18 +97,23 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
         padding: 4,
         boxShadow: "dark-lg",
         zIndex: 9999,
-        fontSize: 'xs',
+        fontSize: "xs",
       }}
       {...divProps}
       onMouseUp={handleTextSelection}
     >
       {loading ? (
-        <Spinner color='red.500' />
+        <Spinner color="red.500" />
       ) : (
         <Stack direction="row" spacing={3}>
           {slots.length > 0 && (
             <>
-              <Tooltip label="Clipboard" fontSize='xs' bg='gray.700' color='black'>
+              <Tooltip
+                label="Clipboard"
+                fontSize="xs"
+                bg="gray.700"
+                color="black"
+              >
                 <IconButton
                   aria-label="Copy to Clipboard"
                   icon={<CopyIcon />}
@@ -117,7 +125,13 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
                 />
               </Tooltip>
               {slots.map((slot, index) => (
-                <Tooltip key={slot.id} label={slot.name} bg='gray.700' color='black'>
+                <Tooltip
+                  key={slot.id}
+                  label={slot.name}
+                  fontSize="xs"
+                  bg="gray.700"
+                  color="black"
+                >
                   <IconButton
                     aria-label={`button${index}`}
                     icon={<ChatIcon />}
@@ -126,7 +140,9 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
                     onClick={() => handleSlotClick(slot, onChatClick)}
                     variant="outline"
                     border="2px"
-                    backgroundColor={slot.id === selectedSlotId ? "orange" : "transparent"}
+                    backgroundColor={
+                      slot.id === selectedSlotId ? "orange" : "transparent"
+                    }
                   />
                 </Tooltip>
               ))}
@@ -135,7 +151,7 @@ const GPTRequestButton: React.FC<GPTRequestButtonProps> = ({
                 colorScheme="blue"
                 icon={<ArrowRightIcon />}
                 aria-label="Open Drawer"
-                onClick={handleClick}
+                onClick={handleDrawerClick}
               />
             </>
           )}
