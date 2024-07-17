@@ -1,23 +1,39 @@
 // ParentComponent.tsx
-import React, { useState, useEffect } from 'react';
-import SideDrawer from './SideDrawer';
+import React, { useState } from 'react';
+import { Drawer, DrawerBody, DrawerHeader, DrawerOverlay, DrawerContent, DrawerCloseButton, Button } from '@chakra-ui/react';
+import GPTRequestButton from "../components/GPTRequestButton" // Adjust the path as necessary
 
 const ParentComponent: React.FC = () => {
-  const [isDrawerOpen, setDrawerOpen] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
-  useEffect(() => {
-    console.log('Drawer state changed:', isDrawerOpen);
-  }, [isDrawerOpen]);
+  const handleOpenDrawer = () => {
+    setIsDrawerOpen(true);
+  };
 
-  const handleButtonClick = () => {
-    console.log('Button clicked, toggling drawer state');
-    setDrawerOpen(!isDrawerOpen);
+  const handleCloseDrawer = () => {
+    setIsDrawerOpen(false);
   };
 
   return (
     <div>
-      <button onClick={handleButtonClick}>Open Drawer</button>
-      <SideDrawer isOpen={isDrawerOpen} onClose={() => setDrawerOpen(false)} />
+      <GPTRequestButton
+        top={10}
+        left={10}
+        loading={false}
+        onChatClick={(slot) => console.log(slot)}
+        onOpenDrawer={handleOpenDrawer}
+        selectedSlot={null}
+      />
+      <Drawer isOpen={isDrawerOpen} placement="right" onClose={handleCloseDrawer}>
+        <DrawerOverlay />
+        <DrawerContent>
+          <DrawerCloseButton />
+          <DrawerHeader>Drawer Title</DrawerHeader>
+          <DrawerBody>
+            Drawer Content
+          </DrawerBody>
+        </DrawerContent>
+      </Drawer>
     </div>
   );
 };
