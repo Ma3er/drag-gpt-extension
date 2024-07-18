@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import PermanentDrawer from "./SideDrawer"; // Ensure this path is correct
 
 const ParentComponent: React.FC = () => {
-  const [isDrawerOpen, setDrawerOpen] = useState(true);
+  const [isDrawerOpen, setDrawerOpen] = useState(false); // Initialize to false
 
   const handleToggleDrawer = () => {
     setDrawerOpen(!isDrawerOpen);
